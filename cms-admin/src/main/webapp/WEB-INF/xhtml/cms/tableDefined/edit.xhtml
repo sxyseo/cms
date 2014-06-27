@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://www.calm.cn/xhtml/extras/core"
+	xmlns:ui="http://www.calm.cn/xhtml/extras/ui"
+	xmlns:fe="http://www.calm.cn/xhtml/extras/framework/ext">
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+<c:include url="/head.xhtml"/>
+<style type="text/css">
+	.edit table thead th{
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+	<div>
+		<div class="guard">
+			<div class='l'>
+				<span>内容管理</span><ui:outputText value=">>" />
+				<span>模型管理</span><ui:outputText value=">>" />
+				<span>信息编辑</span>
+			</div>
+			<div class='r'><button onclick="window.location.href='${request.contextPath}/cms/tableDefined/'">返回</button></div>
+			<div style="clear:both;"></div>
+		</div>
+		
+		<div class="content">
+			<form class="edit" action="${request.contextPath}/cms/tableDefined/edit/${id}" method="post">
+				<ul>
+					<li><label>名称</label><input name="name" value="${entity.name}" /></li>
+					<li><label>描述</label><textarea name="description">${entity.description}</textarea></li>
+					<li><label>属性</label>
+						<table style="display: inline-block;">
+							<thead>
+								<tr>
+									<th>类型</th>
+									<th>关系</th>
+									<th>必须输入</th>
+									<th><button type="button">添加</button></th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:each var="c" value="${entity.columns}" status="cStatus">
+									<tr>
+										<td>
+											<select name="columns[${cStatus.index}].id.columnDefined.id">
+												<c:each var="t" value="cols">
+													<option value="${t.id}">${t.name}</option>
+												</c:each>
+											</select>
+										</td>
+										<td>
+											<select name="columns[${cStatus.index}].relation">
+												<c:each var="r" value="${relations}">
+													<option value="${r}">${r.displayName}</option>
+												</c:each>
+											</select>
+										</td>
+										<td><input type="checkbox" /></td>
+										<td><button type="button">删除</button></td>
+									</tr>
+								</c:each>
+							</tbody>
+						</table>
+					</li>
+				</ul>
+				<div class='btn'>
+					<button type="submit">确定</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<c:include url="/message.xhtml"/>
+</body>
+</html>

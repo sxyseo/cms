@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+<#include "/head.html">
+</head>
+<body>
+	<div>
+		<div class="guard">
+			<div class='l'>
+				<span>内容管理</span>>>
+				<span>模型管理</span>>>
+				<span>信息编辑</span>
+			</div>
+			<div class='r'><button onclick="window.location.href='${request.contextPath}/cms/columnDefined/'">返回</button></div>
+			<div style="clear:both;"></div>
+		</div>
+		
+		<div class="content">
+			<form class="edit" action="${request.contextPath}/cms/columnDefined/edit/${id}" method="post">
+				<ul>
+					<li><label>名称</label><input name="name" value="${entity.name}"></li>
+					<#if id??>
+					<li style="line-height: 25px;"><label>列名</label><input name="columnName" value="${entity.columnName}" type="hidden"><span>${entity.columnName}</span></li>
+					<#else>
+					<li style="line-height: 25px;"><label>列名</label><input name="columnName" value="${entity.columnName}"></li>
+					</#if>
+					<li><label>类型</label><select name="processor.id">
+							<#list types as p>
+								<#if p==entity.processor>
+									<option selected="selected" value="${p.id}">${p.name}</option>
+								<#else>
+									<option value="${p.id}">${p.name}</option>
+								</#if>
+							</#list>
+						</select>
+					</li>
+					<li><label>描述</label><textarea name="description">${entity.description}</textarea></li>
+				</ul>
+				<div class='btn'>
+					<button type="submit">确定</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<#include "/message.html">
+</body>
+</html>

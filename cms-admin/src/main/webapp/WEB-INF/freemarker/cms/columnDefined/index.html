@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+<#include "/head.html">
+</head>
+<body>
+	<div>
+		<div class="guard">
+			<div class='l'>
+				<span>内容管理</span>>>
+				<span>模型管理</span>
+			</div>
+			<div class='r'><button onclick="window.location.href='${request.contextPath}/cms/columnDefined/edit/'">添加</button></div>
+			<div style="clear:both;"></div>
+		</div>
+		
+		<div class="content">
+			<form class="list" action="${request.contextPath}/cms/columnDefined/" method="post">
+				<div class="search">
+					<div style="display:inline-block;">
+						<ul style="width: 430px;padding-left: 0px;">
+							<li><label>名称：</label><input name="name" value='${entity.name}'/></li>
+							<li><label>描述：</label><input name="description" value='${entity.description}'/></li>
+						</ul>
+						<span style="clear:both;"></span>
+					</div>
+					<button>查询</button>
+				</div>
+				<div class="result">
+					<table colspan="0">
+						<thead>
+							<tr>
+								<th>名称</th>
+								<th>列名</th>
+								<th>类型</th>
+								<th>描述</th>
+								<th width="100"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<#list paging.data as r>
+							<tr class="even">
+								<td><a href="${request.contextPath}/cms/columnDefined/edit/${r.id}">${r.name}</a></td>
+								<td>${(r.columnName)!}</td>
+								<td>${(r.processor.name)!}</td>
+								<td>${(r.description)!}</td>
+								<td>
+									<a href="${request.contextPath}/cms/columnDefined/delete/${r.id}">删除</a>
+								</td>
+							</tr>
+							</#list>
+						</tbody>
+					</table>
+				</div>
+				<div class='paging'>
+					<#include "/pageFooter.html"/>
+				</div>
+			</form>
+		</div>
+	</div>
+	<#include "/message.html">
+</body>
+</html>
