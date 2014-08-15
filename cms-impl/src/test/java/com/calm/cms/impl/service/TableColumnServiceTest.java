@@ -27,7 +27,7 @@ public class TableColumnServiceTest extends FrameworkTest {
 		assertNotNull(tableColumnService);
 		TableDefined table = tableDefinedService.loadByProperty("name", "老师_学生");
 		ColumnDefined column = columnDefinedService.loadByProperty(
-				"columnName", "XUE_SHENG_BIAN_HAO");
+				"columnName", "LAO_SHI_BIAN_HAO");
 		TableColumn tc = new TableColumn(table, column);
 		tableColumnService.add(tc);
 		tableDefinedService.updateSqlText(table);

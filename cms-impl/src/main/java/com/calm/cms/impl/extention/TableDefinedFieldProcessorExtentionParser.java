@@ -20,23 +20,25 @@ public class TableDefinedFieldProcessorExtentionParser extends
 	private ITableDefinedService tableDefinedService;
 
 	@Override
-	public void parser(Element el,ExtentionProcess process) {
+	public void parser(Element el, ExtentionProcess process) {
 		List<TableDefined> listAll = tableDefinedService.listAllDataTable();
 		String processorId = el.attributeValue("processor-id");
 		FieldType type;
 		for (TableDefined td : listAll) {
-			type = new FieldType();
 			Integer id = td.getId();
+			type = fieldTypeService.loadByProperty("tableDefinedId", id);
+			if (type == null) {
+				type = new FieldType();
+			}
 			type.setTableDefinedId(id);
 			type.setType(ProcessorType.TABLE);
 			type.setProcessId(processorId);
 			type.setName(td.getName());
 			type.setDescription("");
-			FieldType loadById = fieldTypeService.loadByProperty("tableDefinedId", id);
-			if (loadById == null) {
+			type.setDeleteClass(false);
+			if (type.getId() == null) {
 				fieldTypeService.add(type);
 			} else {
-				type.setDeleteClass(false);
 				fieldTypeService.update(type);
 			}
 		}

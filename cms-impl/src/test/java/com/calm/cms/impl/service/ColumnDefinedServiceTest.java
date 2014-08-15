@@ -6,20 +6,24 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.calm.cms.api.entity.ColumnDefined;
+import com.calm.cms.api.entity.FieldType;
 import com.calm.cms.api.service.IColumnDefinedService;
+import com.calm.cms.api.service.IFieldTypeService;
 import com.calm.framework.test.FrameworkTest;
 
 public class ColumnDefinedServiceTest extends FrameworkTest {
 	@Resource
 	private IColumnDefinedService columnDefinedService;
-
+	@Resource
+	private IFieldTypeService typeService;
 	@Test
 	public void testAdd() {
 		Assert.assertNotNull(columnDefinedService);
 		ColumnDefined cd = new ColumnDefined();
 		cd.setName("老师编号");
 		cd.setColumnName("LAO_SHI_BIAN_HAO");
-//		cd.setProcessor("integerProcessor");
-		columnDefinedService.add(cd);
+		FieldType loadByProperty = typeService.loadByProperty("name", "integerProcessor");
+		cd.setProcessor(loadByProperty);
+//		columnDefinedService.add(cd);
 	}
 }

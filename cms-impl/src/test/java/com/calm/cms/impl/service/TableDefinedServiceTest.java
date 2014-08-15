@@ -20,12 +20,16 @@ public class TableDefinedServiceTest {
 
 	@Test
 	public void testAdd() {
-//		TableDefined td = new TableDefined();
-//		td.setName("学生表");
-//		assertNotNull(definedService);
-//		definedService.update(td);
 		TableDefined td = new TableDefined();
+		td.setName("老师");
+		assertNotNull(definedService);
+		definedService.add(td);
+		td = new TableDefined();
 		td.setName("老师_学生");
+		assertNotNull(definedService);
+		definedService.add(td);
+		td = new TableDefined();
+		td.setName("学生");
 		assertNotNull(definedService);
 		definedService.add(td);
 	}

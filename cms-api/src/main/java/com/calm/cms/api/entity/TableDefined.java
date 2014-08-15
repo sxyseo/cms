@@ -33,7 +33,7 @@ public class TableDefined implements BaseEntity<Integer> {
 	private String name;
 	@Column(name = "DESCRIPTION")
 	private String description;
-	@Column(name = "SQL_TEXT")
+	@Column(name = "SQL_TEXT", length = 1000000000)
 	private String sqlText;
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "TABLE_ID")
