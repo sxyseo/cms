@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.calm.cms.api.entity.ColumnDefined;
 import com.calm.cms.api.entity.FieldType;
+import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableColumnKey;
 import com.calm.cms.api.entity.TableDefined;
@@ -18,6 +19,7 @@ import com.calm.cms.api.processor.FieldProcessor;
 import com.calm.cms.api.service.IColumnDefinedService;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
+import com.calm.cms.impl.processor.TableDefinedProcessor;
 
 @Component
 public class EntityMapResultTransformer extends
@@ -75,10 +77,17 @@ public class EntityMapResultTransformer extends
 				TableColumn tableColumn = tcService
 						.loadById(new TableColumnKey(table, column));
 				FieldType processor = column.getProcessor();
-				FieldProcessor fieldProcessor = ProcessorUtils
-						.getFieldProcessor(processor.getId(), context);
-				Object realValue = fieldProcessor.get(id, e.getValue(),
-						tableColumn);
+				ProcessorType type = processor.getType();
+				String processId = processor.getProcessId();
+				FieldProcessor bean = context.getBean(processId,
+						FieldProcessor.class);
+				if (type == ProcessorType.TABLE) {
+					if (bean instanceof TableDefinedProcessor) {
+						((TableDefinedProcessor) bean).setTableId(processor
+								.getTableDefinedId());
+					}
+				}
+				Object realValue = bean.get(id, e.getValue(), tableColumn);
 				result.put(key, realValue);
 			}
 			return result;

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.calm.cms.admin.vo.TableDefinedVo;
 import com.calm.cms.api.entity.ColumnDefined;
 import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableDefined;
@@ -47,7 +46,7 @@ public class TableDefinedAction extends
 	}
 
 	@RequestMapping(value = "/edit/", method = RequestMethod.POST)
-	public String add(TableDefinedVo entity, ArrayList<ColumnDefined> columns,
+	public String add(TableDefined entity, ArrayList<ColumnDefined> columns,
 			Model model) {
 		if (StringUtils.isEmpty(entity.getName())) {
 			addFieldError("name", "GLOBAL_E_00001");
@@ -65,7 +64,8 @@ public class TableDefinedAction extends
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-	public String update(@PathVariable("id") Integer id, TableDefined entity, Model model) {
+	public String update(@PathVariable("id") Integer id, TableDefined entity,
+			Model model) {
 		if (StringUtils.isEmpty(entity.getName())) {
 			addFieldError("name", "GLOBAL_E_00001");
 		}

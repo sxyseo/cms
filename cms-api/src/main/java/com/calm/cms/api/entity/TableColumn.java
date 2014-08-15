@@ -21,6 +21,8 @@ public class TableColumn implements BaseEntity {
 	private Relation relation;
 	@Column(name = "RELATION_COLUMN")
 	private String relationColumn;
+	@Column(name = "REQUIRED")
+	private Boolean required;
 	public TableColumn() {
 	}
 
@@ -68,6 +70,14 @@ public class TableColumn implements BaseEntity {
 
 	public void setRelationColumn(String relationColumn) {
 		this.relationColumn = relationColumn;
+	}
+
+	public Boolean getRequired() {
+		return required;
+	}
+
+	public void setRequired(Boolean required) {
+		this.required = required;
 	}
 
 }

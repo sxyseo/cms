@@ -2,8 +2,13 @@ package com.calm.cms.api.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 import com.calm.framework.common.entity.BaseEntity;
 import com.calm.framework.common.entity.LogisticDeletable;
@@ -12,13 +17,22 @@ import com.calm.framework.common.entity.LogisticDeletable;
 @Table(name = "FIELD_TYPE")
 public class FieldType implements BaseEntity, LogisticDeletable {
 	@Id
-	private String id;
-
+	@TableGenerator(name = "FIELD_TYPE_ID", pkColumnValue = "FIELD_TYPE_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
+	@GeneratedValue(generator = "FIELD_TYPE_ID", strategy = GenerationType.TABLE)
+	private Integer id;
+	@Column(name = "PROCESS_ID")
+	private String processId;
 	private String name;
 
 	private String description;
-	
-	@Column(name="DELETE_CLASS")
+	@Column(name = "PROCESSOR_TYPE")
+	@Enumerated(EnumType.STRING)
+	private ProcessorType type;
+
+	@Column(name = "TABLE_DEFINED_ID")
+	private Integer tableDefinedId;
+
+	@Column(name = "DELETE_CLASS")
 	private Boolean deleteClass;
 
 	@Override
@@ -31,11 +45,11 @@ public class FieldType implements BaseEntity, LogisticDeletable {
 		return null;
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -87,5 +101,29 @@ public class FieldType implements BaseEntity, LogisticDeletable {
 			return false;
 		return true;
 	}
-	
+
+	public ProcessorType getType() {
+		return type;
+	}
+
+	public void setType(ProcessorType type) {
+		this.type = type;
+	}
+
+	public Integer getTableDefinedId() {
+		return tableDefinedId;
+	}
+
+	public void setTableDefinedId(Integer tableDefinedId) {
+		this.tableDefinedId = tableDefinedId;
+	}
+
+	public String getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(String processId) {
+		this.processId = processId;
+	}
+
 }

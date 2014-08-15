@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.calm.cms.api.entity.ColumnDefined;
 import com.calm.cms.api.entity.FieldType;
+import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.service.IColumnDefinedService;
 import com.calm.cms.api.service.IFieldTypeService;
 import com.calm.framework.web.BaseCurdAction;
@@ -68,6 +70,15 @@ public class ColumnDefinedAction extends
 	public String delete(@PathVariable("id") Integer id, Model model) {
 		return super.delete(id, model);
 	}
+	@RequestMapping(value = "/columns/{id}")
+	@ResponseBody
+	public Object columns(@PathVariable("id") Integer id, Model model) {
+		ColumnDefined loadById = getService().loadById(id);
+		FieldType processor = loadById.getProcessor();
+		ProcessorType type = processor.getType();
+		return null;
+	}
+
 	@Resource
 	@Override
 	public void setService(IColumnDefinedService service) {

@@ -13,6 +13,15 @@
 		text-align: center;
 	}
 </style>
+<SCRIPT type="text/javascript">
+	function loadColumns(tar){
+		var t=$(tar);
+		
+		$.get("${request.contextPath}/cms/columnDefined/columns/"+t.val(),function(result){
+			
+		},"json");
+	}
+</SCRIPT>
 </head>
 <body>
 	<div>
@@ -36,7 +45,7 @@
 							<thead>
 								<tr>
 									<th>类型</th>
-									<th>关系</th>
+									<th style="width: 220px;">关系</th>
 									<th>必须输入</th>
 									<th><button type="button">添加</button></th>
 								</tr>
@@ -45,20 +54,25 @@
 								<c:each var="c" value="${entity.columns}" status="cStatus">
 									<tr>
 										<td>
-											<select name="columns[${cStatus.index}].id.columnDefined.id">
+											<select name="columns[${cStatus.index}].id.columnDefined.id" style="width: 150px;" onchange="loadColumns(this)">
 												<c:each var="t" value="cols">
 													<option value="${t.id}">${t.name}</option>
 												</c:each>
 											</select>
 										</td>
 										<td>
-											<select name="columns[${cStatus.index}].relation">
+											<select name="columns[${cStatus.index}].relation" style="width: 100px;">
+												<c:each var="r" value="${relations}">
+													<option value="${r}">${r.displayName}</option>
+												</c:each>
+											</select>
+											<select name="columns[${cStatus.index}].relation" style="width: 100px;">
 												<c:each var="r" value="${relations}">
 													<option value="${r}">${r.displayName}</option>
 												</c:each>
 											</select>
 										</td>
-										<td><input type="checkbox" /></td>
+										<td><input type="checkbox" value="true" name="columns[${cStatus.index}].required"/></td>
 										<td><button type="button">删除</button></td>
 									</tr>
 								</c:each>
