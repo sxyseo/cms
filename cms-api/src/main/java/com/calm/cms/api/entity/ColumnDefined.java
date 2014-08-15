@@ -14,7 +14,11 @@ import com.calm.framework.common.entity.BaseEntity;
 
 @Entity
 @Table(name = "COLUMN_DEFINED")
-public class ColumnDefined implements BaseEntity {
+public class ColumnDefined implements BaseEntity<Integer> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@TableGenerator(name = "COLUMN_DEFINED_ID", pkColumnValue = "COLUMN_DEFINED_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
 	@GeneratedValue(generator = "COLUMN_DEFINED_ID", strategy = GenerationType.TABLE)

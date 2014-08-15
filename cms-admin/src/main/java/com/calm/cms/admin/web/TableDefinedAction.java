@@ -23,7 +23,7 @@ import com.calm.framework.web.BaseCurdAction;
 @Controller
 @RequestMapping("cms/tableDefined")
 public class TableDefinedAction extends
-		BaseCurdAction<TableDefined, ITableDefinedService> {
+		BaseCurdAction<Integer,TableDefined, ITableDefinedService> {
 	@Resource
 	private IColumnDefinedService columnDefinedService;
 

@@ -9,7 +9,11 @@ import com.calm.framework.common.entity.BaseEntity;
 
 @Entity
 @Table(name = "COLUMN_DATA")
-public class ColumnData implements BaseEntity {
+public class ColumnData implements BaseEntity<ColumnDataKey> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@EmbeddedId
 	private ColumnDataKey id;
 	@Column(name = "VALUE_TEXT")

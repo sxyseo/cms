@@ -1,5 +1,6 @@
 package com.calm.cms.impl.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +12,14 @@ import org.springframework.stereotype.Service;
 import com.calm.cms.api.dao.IColumnDataDao;
 import com.calm.cms.api.dao.QueryMapper;
 import com.calm.cms.api.entity.ColumnData;
+import com.calm.cms.api.entity.ColumnDataKey;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.service.IColumnDataService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.common.service.impl.BaseService;
 
 @Service
-public class ColumnDataService extends BaseService<ColumnData> implements
+public class ColumnDataService extends BaseService<ColumnDataKey,ColumnData> implements
 		IColumnDataService {
 	@Resource(name = "columnDataDao")
 	private IColumnDataDao columnDataDao;
@@ -29,6 +31,9 @@ public class ColumnDataService extends BaseService<ColumnData> implements
 	@SuppressWarnings("unchecked")
 	public List<Map<String,Object>> listAll(Integer tableId) {
 		TableDefined loadById = tableDefinedService.loadById(tableId);
+		if (loadById == null) {
+			return Collections.EMPTY_LIST;
+		}
 		SQLQuery createSQLQuery = columnDataDao.createSQLQuery(loadById.getSqlText());
 		createSQLQuery.setResultTransformer(entityMapResultTransformer);
 		return createSQLQuery.list();

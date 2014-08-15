@@ -7,12 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableColumn;
+import com.calm.cms.api.entity.TableColumnKey;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.common.service.impl.BaseService;
 
 @Service
-public class TableColumnService extends BaseService<TableColumn> implements
+public class TableColumnService extends BaseService<TableColumnKey,TableColumn> implements
 		ITableColumnService {
 	@Resource
 	private ITableDefinedService tableDefinedService;

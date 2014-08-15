@@ -14,10 +14,10 @@ import com.calm.framework.common.exception.EntityAlreadyExistException;
 import com.calm.framework.common.service.impl.BaseService;
 
 @Service
-public class TableDefinedService extends BaseService<TableDefined> implements
+public class TableDefinedService extends BaseService<Integer,TableDefined> implements
 		ITableDefinedService {
 	@Override
-	protected void queryPaging(Query<TableDefined> query, TableDefined ui) {
+	protected void queryPaging(Query<Integer,TableDefined> query, TableDefined ui) {
 		query.eq("tableType", TableType.DATA);
 	}
 
@@ -28,7 +28,7 @@ public class TableDefinedService extends BaseService<TableDefined> implements
 
 	@Override
 	protected void preAdd(TableDefined newEntity) {
-		Query<TableDefined> query = createQuery();
+		Query<Integer,TableDefined> query = createQuery();
 		query.eq("name", newEntity.getName());
 		List<TableDefined> list = query.list();
 		if (list.size() > 0) {
@@ -64,7 +64,7 @@ public class TableDefinedService extends BaseService<TableDefined> implements
 
 	@Override
 	public List<TableDefined> listAllDataTable() {
-		Query<TableDefined> query = createQuery();
+		Query<Integer,TableDefined> query = createQuery();
 		query.eq("tableType", TableType.DATA);
 		return query.list();
 	}

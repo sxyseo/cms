@@ -12,7 +12,7 @@ import com.calm.framework.common.service.impl.BaseService;
 import com.calm.framework.util.BeanUtils;
 
 @Service
-public class ColumnDefinedService extends BaseService<ColumnDefined> implements
+public class ColumnDefinedService extends BaseService<Integer,ColumnDefined> implements
 		IColumnDefinedService {
 
 	@Override
@@ -25,7 +25,7 @@ public class ColumnDefinedService extends BaseService<ColumnDefined> implements
 	}
 	@Override
 	protected void preAdd(ColumnDefined newEntity) {
-		Query<ColumnDefined> query = createQuery();
+		Query<Integer,ColumnDefined> query = createQuery();
 		query.eq("name", newEntity.getName());
 		List<ColumnDefined> list = query.list();
 		if (list.size() > 0) {

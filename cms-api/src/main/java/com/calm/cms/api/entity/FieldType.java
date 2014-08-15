@@ -15,7 +15,11 @@ import com.calm.framework.common.entity.LogisticDeletable;
 
 @Entity
 @Table(name = "FIELD_TYPE")
-public class FieldType implements BaseEntity, LogisticDeletable {
+public class FieldType implements BaseEntity<Integer>, LogisticDeletable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@TableGenerator(name = "FIELD_TYPE_ID", pkColumnValue = "FIELD_TYPE_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
 	@GeneratedValue(generator = "FIELD_TYPE_ID", strategy = GenerationType.TABLE)

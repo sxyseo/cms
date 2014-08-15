@@ -19,7 +19,11 @@ import com.calm.framework.common.entity.BaseEntity;
 
 @Entity
 @Table(name = "TABLE_DEFINED")
-public class TableDefined implements BaseEntity {
+public class TableDefined implements BaseEntity<Integer> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "ID")
 	@TableGenerator(name = "TABLE_DEFINED_ID", pkColumnValue = "TABLE_DEFINED_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)

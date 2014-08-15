@@ -9,7 +9,7 @@ import com.calm.framework.common.service.impl.BaseService;
 
 @Service
 @Transactional
-public class FieldTypeService extends BaseService<FieldType> implements
+public class FieldTypeService extends BaseService<Integer,FieldType> implements
 		IFieldTypeService {
 
 	@Override

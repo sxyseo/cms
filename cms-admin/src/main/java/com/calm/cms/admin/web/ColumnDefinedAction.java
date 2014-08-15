@@ -23,7 +23,7 @@ import com.calm.framework.web.BaseCurdAction;
 @Controller
 @RequestMapping("cms/columnDefined")
 public class ColumnDefinedAction extends
-		BaseCurdAction<ColumnDefined, IColumnDefinedService> {
+		BaseCurdAction<Integer,ColumnDefined, IColumnDefinedService> {
 	@Resource
 	private IFieldTypeService fieldTypeService;
 	@RequestMapping("/")
@@ -76,6 +76,8 @@ public class ColumnDefinedAction extends
 		ColumnDefined loadById = getService().loadById(id);
 		FieldType processor = loadById.getProcessor();
 		ProcessorType type = processor.getType();
+		// TODO Î´Íê´ýÐø
+		System.out.println(type);
 		return null;
 	}
 
