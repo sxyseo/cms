@@ -19,11 +19,13 @@ public class ColumnDefinedServiceTest extends FrameworkTest {
 	@Test
 	public void testAdd() {
 		Assert.assertNotNull(columnDefinedService);
-		ColumnDefined cd = new ColumnDefined();
-		cd.setName("老师编号");
-		cd.setColumnName("LAO_SHI_BIAN_HAO");
-		FieldType loadByProperty = typeService.loadByProperty("name", "integerProcessor");
+		ColumnDefined cd = columnDefinedService.loadByProperty("name", "老师编号");
+//		ColumnDefined cd = new ColumnDefined();
+//		cd.setName("老师编号");
+//		cd.setColumnName("LAO_SHI_BIAN_HAO");
+		FieldType loadByProperty = typeService.loadByProperty("name", "老师");
 		cd.setProcessor(loadByProperty);
+		columnDefinedService.update(cd);
 //		columnDefinedService.add(cd);
 	}
 }

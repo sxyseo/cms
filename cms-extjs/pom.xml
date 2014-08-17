@@ -7,4 +7,16 @@
   </parent>
   <artifactId>cms-extjs</artifactId>
   <packaging>war</packaging>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.calm</groupId>
+  		<artifactId>webdesk</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.calm</groupId>
+  		<artifactId>cms-impl</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

@@ -1,0 +1,19 @@
+<extention xmlns="http://www.calm.com/extention/framework/extention" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:module="http://www.calm.com/extention/framework/webdesk"
+	xsi:schemaLocation="http://www.calm.com/extention/framework/extention extension.xsd
+	http://www.calm.com/extention/framework/webdesk webdesk.xsd">
+	<module:moduleGroup name="内容管理系统" id="com.calm.cms"/>
+	<module:module id="cms-table-defined" name="模型定义" className="com.calm.cms.ui.TableDefined" groupId="com.calm.cms" referenceStylesheet="">
+		<module:quickStart name="模型定义" iconCls="cms-table-defined-quickstart"/>
+		<module:shortCut name="模型定义" iconCls="cms-table-defined-shortcut"/>
+	</module:module>
+<!-- 	<module:module id="platform-message-info-win" name="信息管理" className="com.calm.platform.ui.Message" groupId="com.calm.platform"> -->
+<!-- 		<module:quickStart name="信息管理" iconCls="platform-message-quickstart"/> -->
+<!-- 		<module:shortCut name="信息管理" iconCls="platform-message-shortcut"/> -->
+<!-- 	</module:module> -->
+<!-- 	<module:module id="platform-parameter-win" name="系统选项" className="com.calm.platform.ui.SystemParameter" groupId="com.calm.platform"> -->
+<!-- 		<module:quickStart name="系统选项" iconCls="platform-parameter-quickstart"/> -->
+<!-- 		<module:shortCut name="系统选项" iconCls="platform-parameter-shortcut"/> -->
+<!-- 	</module:module> -->
+</extention>

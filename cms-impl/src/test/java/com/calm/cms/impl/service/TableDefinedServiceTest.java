@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.calm.cms.api.entity.TableDefined;
+import com.calm.cms.api.entity.TableType;
 import com.calm.cms.api.service.ITableDefinedService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,14 +22,17 @@ public class TableDefinedServiceTest {
 	@Test
 	public void testAdd() {
 		TableDefined td = new TableDefined();
+		td.setTableType(TableType.DATA);
 		td.setName("老师");
 		assertNotNull(definedService);
 		definedService.add(td);
 		td = new TableDefined();
 		td.setName("老师_学生");
+		td.setTableType(TableType.RELATION);
 		assertNotNull(definedService);
 		definedService.add(td);
 		td = new TableDefined();
+		td.setTableType(TableType.DATA);
 		td.setName("学生");
 		assertNotNull(definedService);
 		definedService.add(td);
