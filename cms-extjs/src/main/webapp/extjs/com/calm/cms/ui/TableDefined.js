@@ -12,6 +12,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         'Ext.tree.Panel',
         'Ext.form.field.Text',
         'com.calm.cms.module.TableDefined',
+        'com.calm.cms.module.TableColumn',
         'com.calm.platform.Utils'
     ],
 
@@ -54,27 +55,41 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 	    	               flex:1
 	    	          }, {
     				 xtype:'actioncolumn',
-    				 width:50,
+    				 width:60,
     				 items: [{
-    					 iconCls: 'edit',
-    	                tooltip: '修改',
-    	                handler: function(grid, rowIndex, colIndex) {
-    	                	//获得对话框
-    	                	var editorWindow=me.createEditorWindow();
-                        	//获得表单在的panel
-    	                	var detailPanel = editorWindow.getComponent('cms-table-defined-add-panel');
-    	                	//获得选中的数据
-    	                    var rec = grid.getStore().getAt(rowIndex);
-    	                    //获得表单，并把数据加载到表单内
-    	                    var form=detailPanel.getForm();
-    	                    form.url='cms/tableDefined/update';
-    	                    form.loadRecord(rec);
-    	                    var field=form.findField("id");
-    	                    field.readOnly = true;
+    					iconCls: 'cms-table-defined-action-table-column',
+     	                tooltip: '编辑列',
+     	                handler: function(grid, rowIndex, colIndex) {
+//     	                	//获得对话框
+     	                	var editorWindow=me.createTableColumnWindow();
+     	                	//获得选中的数据
+     	                    var rec = grid.getStore().getAt(rowIndex);
+     	                    var tableColumnGrid=Ext.getCmp('cms-table-defined-table-column-grid');
+     	                    var store=tableColumnGrid.getStore();
+     	                    store.load({params:{tableId:rec.get('id')}});
 
-    	                    editorWindow.show();
-    	                }
-    	            },{
+     	                    editorWindow.show();
+     	                }
+     	            },{
+   					 iconCls: 'edit',
+ 	                tooltip: '修改',
+ 	                handler: function(grid, rowIndex, colIndex) {
+ 	                	//获得对话框
+ 	                	var editorWindow=me.createEditorWindow();
+                     	//获得表单在的panel
+ 	                	var detailPanel = editorWindow.getComponent('cms-table-defined-add-panel');
+ 	                	//获得选中的数据
+ 	                    var rec = grid.getStore().getAt(rowIndex);
+ 	                    //获得表单，并把数据加载到表单内
+ 	                    var form=detailPanel.getForm();
+ 	                    form.url='cms/tableDefined/update';
+ 	                    form.loadRecord(rec);
+ 	                    var field=form.findField("id");
+ 	                    field.readOnly = true;
+
+ 	                    editorWindow.show();
+ 	                	}
+     	            },{
     	            	iconCls: 'remove',
     	                tooltip: '删除',
     	                isDisabled :function(grid, rowIndex, colIndex,item ,record ){
@@ -229,6 +244,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 	                }, {
 	                    text: '保存',
 	                    handler: function() {
+	                    	var form = this.up('form').getForm();
                     	 if (form.isValid()) {
                              form.submit({
                             	 waitMsg: '正在保存...',
@@ -248,6 +264,150 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         	 });
             win = desktop.createWindow({
                 id: 'cms-table-defined-editor-win',
+                title: '详细信息',
+                width:440,
+                height:300,
+                modal:true,
+                iconCls: 'cms-table-defined-icon',
+                animCollapse:false,
+                constrainHeader:true,
+                layout: {
+                    type: 'fit',
+                    padding: 5
+                },
+                items: [form]
+            });
+        }
+        return win;
+    },
+    createTableColumnWindow:function(){
+		var me=this;
+		var desktop = me.app.getDesktop();
+		var win = desktop.getWindow('cms-table-defined-table-column-win');
+		if (!win) {
+			var grid=Ext.create('Ext.grid.Panel', {
+				id:'cms-table-defined-table-column-grid',
+				store:Ext.create('Ext.data.Store', {
+					model: 'com.calm.cms.module.TableColumn',
+					pageSize: 15,
+					proxy: {
+						type: 'ajax',
+						url : 'cms/tableDefined/listAllTableColumn',
+						reader: {
+							type: 'json',
+							root: 'list'
+						}
+					}
+				}),
+				columns:[{
+					text: '列名称',
+					dataIndex: 'columnName',
+					width:200
+				},{
+					xtype:'actioncolumn',
+					width:60,
+					items: [{
+						iconCls: 'edit',
+						tooltip: '修改',
+						handler: function(grid, rowIndex, colIndex) {
+						}
+					},{
+						iconCls: 'remove',
+						tooltip: '删除',
+						handler: function(grid, rowIndex, colIndex) {
+						}
+					}]
+				}],
+				dockedItems: [{
+					xtype: 'toolbar',
+					items: [{
+						iconCls: 'add',
+						text: '添加',
+						scope: this,
+						handler: function(){
+							var win=me.createTableColumnEditorWindow();
+							win.show();
+						}
+					}]
+				}]
+			});
+			win = desktop.createWindow({
+				id: 'cms-table-defined-table-column-win',
+				title: '详细信息',
+				width:440,
+				height:300,
+				modal:true,
+				iconCls: 'cms-table-defined-icon',
+				animCollapse:false,
+				constrainHeader:true,
+				layout: {
+					type: 'fit',
+					padding: 5
+				},
+				items: [grid]
+			});
+		}
+        return win;
+    },
+    createTableColumnEditorWindow:function(){
+    	var me=this;
+    	var desktop = me.app.getDesktop();
+        var win = desktop.getWindow('cms-table-defined-table-column-editor-win');
+        if (!win) {
+        	var form =Ext.create('Ext.form.Panel', {
+        		url: 'cms/tableDefined/add',
+                id:'cms-table-defined-table-column-editor-panel',
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%'
+                },
+                bodyPadding: 15,
+                // The fields
+                defaultType: 'textfield',
+        		items:[{
+					name: 'tableId',
+					xtype:'hiddenfield',
+					fieldLabel:'模型ID'
+        		},{
+					name: 'name',
+				    fieldLabel:'列',
+				    xtype:'combobox',
+				    width:60
+				},{
+					name: 'defaultValue',
+				    fieldLabel:'默认值',
+				    width:60
+				},{
+					name: 'relation',
+				    fieldLabel:'关系',
+				    width:60
+				},{
+					name: 'relationColumn',
+				    fieldLabel:'关联列',
+				    width:60
+				},{
+					name: 'required',
+				    fieldLabel:'必须填写',
+				    xtype:'checkbox',
+				    width:60
+				}],
+				buttons: [{
+					text: '取消',
+					handler: function() {
+						this.up('form').getForm().reset();
+						this.up('window').close( );
+					}
+				}, {
+					text: '保存',
+					handler: function() {
+					var form=this.up('form').getForm();
+						if (form.isValid()) {
+						}
+					}
+				}]
+        	});
+            win = desktop.createWindow({
+                id: 'cms-table-defined-table-column-editor-win',
                 title: '详细信息',
                 width:440,
                 height:300,
