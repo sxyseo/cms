@@ -19,7 +19,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
     
     init : function(){
         this.launcher = {
-            text: '信息管理',
+            text: '模型管理',
             iconCls:'cms-table-defined-icon'
         };
     },
@@ -44,7 +44,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         	me.grid =Ext.create('Ext.grid.Panel', {
         	    store:userStore,
         	    columns: [{
-		                    text: '消息',
+		                    text: '模型名称',
 		                    dataIndex: 'name',
 		                    width:200
 	    	           }, {
@@ -56,7 +56,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
     				 xtype:'actioncolumn',
     				 width:50,
     				 items: [{
-    	                icon: 'images/cog_edit.png',  // Use a URL in the icon config
+    					 iconCls: 'edit',
     	                tooltip: '修改',
     	                handler: function(grid, rowIndex, colIndex) {
     	                	//获得对话框
@@ -179,7 +179,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         if (!win) {
             win = desktop.createWindow({
                 id: 'cms-table-defined-win',
-                title: '信息管理',
+                title: '模型管理',
                 width:840,
                 height:480,
                 iconCls: 'cms-table-defined-icon',
@@ -213,7 +213,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 						fieldLabel:'编号'
 					},{
 						name: 'name',
-					    fieldLabel:'信息',
+					    fieldLabel:'模型名称',
 					    width:60
 					},{
 					   fieldLabel: '描述',
