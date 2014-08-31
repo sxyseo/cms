@@ -1,11 +1,8 @@
 package com.calm.cms.api.entity;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.calm.framework.common.entity.BaseEntity;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "TABLE_COLUMN")
@@ -19,29 +16,41 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	 */
 	@EmbeddedId
 	private TableColumnKey id;
+	
 	@Column(name = "DEFAULT_VALUE")
 	private String defaultValue;
+	
 	@Column(name = "RELATION")
 	private Relation relation;
-	@Column(name = "RELATION_COLUMN")
-	private String relationColumn;
+	
+	@Column(name = "NAME")
+	private String name;
+	
+	@Column(name = "DESCRIPTION")
+	private String description;
+	
+	@ManyToOne
+	@JoinColumn(name = "PROCESSOR")
+	private FieldType processor;
+	
 	@Column(name = "REQUIRED")
 	private Boolean required;
+
 	public TableColumn() {
 	}
 
-	public TableColumn(TableDefined tableDefined, ColumnDefined columnDefined) {
-		this.id = new TableColumnKey(tableDefined, columnDefined);
+	public TableColumn(TableDefined tableDefined, String id) {
+		this.id = new TableColumnKey(tableDefined, id);
 	}
 
 	@Override
 	public String getDisplayName() {
-		return null;
+		return "模型项目";
 	}
 
 	@Override
 	public Object getDisplayValue() {
-		return null;
+		return getId().getId();
 	}
 
 	public String getDefaultValue() {
@@ -68,20 +77,39 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 		this.relation = relation;
 	}
 
-	public String getRelationColumn() {
-		return relationColumn;
-	}
-
-	public void setRelationColumn(String relationColumn) {
-		this.relationColumn = relationColumn;
-	}
-
 	public Boolean getRequired() {
+		if (required == null) {
+			required = false;
+		}
 		return required;
 	}
 
 	public void setRequired(Boolean required) {
 		this.required = required;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public FieldType getProcessor() {
+		return processor;
+	}
+
+	public void setProcessor(FieldType processor) {
+		this.processor = processor;
 	}
 
 }

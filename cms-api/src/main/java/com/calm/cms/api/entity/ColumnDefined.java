@@ -1,19 +1,12 @@
 package com.calm.cms.api.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-
 import com.calm.framework.common.entity.BaseEntity;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "COLUMN_DEFINED")
+@Deprecated
 public class ColumnDefined implements BaseEntity<Integer> {
 	/**
 	 * 

@@ -66,6 +66,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
      	                    var rec = grid.getStore().getAt(rowIndex);
      	                    var tableColumnGrid=Ext.getCmp('cms-table-defined-table-column-grid');
      	                    var store=tableColumnGrid.getStore();
+     	                    editorWindow.tableId=rec.get('id');
      	                    store.load({params:{tableId:rec.get('id')}});
 
      	                    editorWindow.show();
@@ -129,7 +130,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
                         itemId:'cms-table-defined-btn-delete',
                         scope: this,
                         handler:function(){
-                        	Ext.Msg.confirm("系统信息","你确定要删除?",function(buttonId,text,opt){
+                        	Ext.Msg.confirm("系统信息","你确定要删除?",function(buttonId){
     	                		if(buttonId=='yes'){
     	                			var view = me.grid.getView();
     	                			var selection = view.getSelectionModel().getSelection()[0];
@@ -289,7 +290,6 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 				id:'cms-table-defined-table-column-grid',
 				store:Ext.create('Ext.data.Store', {
 					model: 'com.calm.cms.module.TableColumn',
-					pageSize: 15,
 					proxy: {
 						type: 'ajax',
 						url : 'cms/tableDefined/listAllTableColumn',
@@ -300,9 +300,29 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					}
 				}),
 				columns:[{
-					text: '列名称',
+					text: '列名',
 					dataIndex: 'columnName',
 					width:200
+				},{
+					text: '名称',
+					dataIndex: 'name',
+					width:200
+				},{
+					text: '关系',
+					dataIndex: 'relationName',
+					width:100
+				},{
+					text: '类型',
+					dataIndex: 'processorName',
+					width:100
+				},{
+					text: '默认值',
+					dataIndex: 'defaultValue',
+					width:100
+				},{
+					text: '必要',
+					dataIndex: 'required',
+					width:50
 				},{
 					xtype:'actioncolumn',
 					width:60,
@@ -326,6 +346,11 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 						scope: this,
 						handler: function(){
 							var win=me.createTableColumnEditorWindow();
+							var tableColWin=Ext.getCmp('cms-table-defined-table-column-win');
+							var formPanel=Ext.getCmp('cms-table-defined-table-column-editor-panel');
+							var form =formPanel.getForm();
+							form.findField('tableId').setValue(tableColWin.tableId);
+							form.findField('relation').setValue('ONE2ONE');
 							win.show();
 						}
 					}]
@@ -334,9 +359,10 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 			win = desktop.createWindow({
 				id: 'cms-table-defined-table-column-win',
 				title: '详细信息',
-				width:440,
-				height:300,
+				width:830,
+				height:500,
 				modal:true,
+				tableId:null,
 				iconCls: 'cms-table-defined-icon',
 				animCollapse:false,
 				constrainHeader:true,
@@ -355,7 +381,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         var win = desktop.getWindow('cms-table-defined-table-column-editor-win');
         if (!win) {
         	var form =Ext.create('Ext.form.Panel', {
-        		url: 'cms/tableDefined/add',
+        		url: 'cms/tableColumn/add',
                 id:'cms-table-defined-table-column-editor-panel',
                 layout: 'anchor',
                 defaults: {
@@ -370,26 +396,65 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					fieldLabel:'模型ID'
         		},{
 					name: 'name',
-				    fieldLabel:'列',
-				    xtype:'combobox',
-				    width:60
+				    fieldLabel:'名称'
+				},{
+					name: 'columnName',
+				    fieldLabel:'列名'
+				},{
+					xtype:'fieldcontainer',
+					layout: 'hbox',
+					fieldLabel:'关系',
+					combineErrors: true,
+					items:[{
+						name: 'relation',
+					    xtype:'combobox',
+					    flex: 1,
+					    forceSelection: true, 
+					    queryMode: 'local',
+					    displayField: 'name',
+					    valueField: 'id',
+					    typeAhead:true,
+					    editable: false,
+					    store:Ext.create('Ext.data.Store', {
+					    	fields:['id', 'name'],
+					    	data : [{"id":"ONE2ONE", "name":"一个"},{"id":"ONE2MANY", "name":"多个"}]
+					    })
+					},{
+						name: 'processorId',
+						xtype:'combobox',
+						margins: '0 0 0 6',
+						flex: 1,
+						forceSelection: true, 
+					    queryMode: 'local',
+					    displayField: 'name',
+					    valueField: 'id',
+					    typeAhead:true,
+					    store:Ext.create('Ext.data.Store', {
+					    	fields:['id', 'name','type'],
+					    	model: 'com.calm.cms.module.FieldType',
+					    	autoLoad:true,
+					    	proxy: {
+			                    type: 'ajax',
+			                    url : 'cms/fieldType/listWithFilterName',
+			                    reader: {
+			                        type: 'json',
+			                        root: 'list'
+			                    }
+			                }
+					    }),
+					    listeners:{
+					    	select:function(combo, value, option){
+					    		alert(value);
+					    	}
+					    }
+					}]
 				},{
 					name: 'defaultValue',
-				    fieldLabel:'默认值',
-				    width:60
-				},{
-					name: 'relation',
-				    fieldLabel:'关系',
-				    width:60
-				},{
-					name: 'relationColumn',
-				    fieldLabel:'关联列',
-				    width:60
+				    fieldLabel:'默认值'
 				},{
 					name: 'required',
 				    fieldLabel:'必须填写',
-				    xtype:'checkbox',
-				    width:60
+				    xtype:'checkbox'
 				}],
 				buttons: [{
 					text: '取消',
@@ -400,8 +465,23 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 				}, {
 					text: '保存',
 					handler: function() {
-					var form=this.up('form').getForm();
+						var form = this.up('form').getForm();
 						if (form.isValid()) {
+							form.submit({
+								waitMsg: '正在保存...',
+								success: function(form, action) {
+									Ext.Msg.alert('系统信息', action.result.message);
+									var tableColWin=Ext.getCmp('cms-table-defined-table-column-win');
+									var tableColGrid=Ext.getCmp('cms-table-defined-table-column-grid');
+//									
+									tableColGrid.getStore().load({params:{tableId:tableColWin.tableId}});
+									tableColGrid.getView().refresh();
+									win.close();
+								},
+								failure: function(form, action) {
+									Ext.Msg.alert('保存失败', action.result.message);
+								}
+							});
 						}
 					}
 				}]

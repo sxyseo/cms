@@ -10,7 +10,7 @@ import com.calm.cms.api.entity.FieldType;
 import com.calm.cms.api.service.IColumnDefinedService;
 import com.calm.cms.api.service.IFieldTypeService;
 import com.calm.framework.test.FrameworkTest;
-
+@Deprecated
 public class ColumnDefinedServiceTest extends FrameworkTest {
 	@Resource
 	private IColumnDefinedService columnDefinedService;

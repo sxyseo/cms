@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.calm.cms.api.entity.ColumnDefined;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.entity.TableType;
@@ -49,10 +48,10 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT CD.ID,CD.TABLE_ID ");
 		for (TableColumn tct : columns) {
-			ColumnDefined cd = tct.getId().getColumnDefined();
-			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = " + cd.getId()
+//			ColumnDefined cd = tct.getId().getColumnDefined();
+			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = " + tct.getId().getId()
 					+ " THEN CD.VALUE_TEXT ELSE NULL END ) "
-					+ cd.getColumnName());
+					+ tct.getId().getId());
 		}
 
 		sql.append(" FROM COLUMN_DATA CD WHERE CD.TABLE_ID=" + table.getId()

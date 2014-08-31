@@ -1,9 +1,9 @@
 package com.calm.cms.api.service;
 
-import java.util.List;
-
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.framework.common.service.IBaseService;
+
+import java.util.List;
 
 public interface ITableDefinedService extends IBaseService<Integer,TableDefined> {
 

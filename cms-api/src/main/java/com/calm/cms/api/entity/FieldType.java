@@ -1,17 +1,9 @@
 package com.calm.cms.api.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-
 import com.calm.framework.common.entity.BaseEntity;
 import com.calm.framework.common.entity.LogisticDeletable;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "FIELD_TYPE")
@@ -38,6 +30,14 @@ public class FieldType implements BaseEntity<Integer>, LogisticDeletable {
 
 	@Column(name = "DELETE_CLASS")
 	private Boolean deleteClass;
+
+	public FieldType() {
+	}
+	
+	public FieldType(Integer id) {
+		super();
+		this.id = id;
+	}
 
 	@Override
 	public String getDisplayName() {

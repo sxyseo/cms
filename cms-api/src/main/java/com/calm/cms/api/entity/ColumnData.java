@@ -1,11 +1,11 @@
 package com.calm.cms.api.entity;
 
+import com.calm.framework.common.entity.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.calm.framework.common.entity.BaseEntity;
 
 @Entity
 @Table(name = "COLUMN_DATA")

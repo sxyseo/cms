@@ -12,6 +12,7 @@ import com.calm.framework.common.service.impl.BaseService;
 import com.calm.framework.util.BeanUtils;
 
 @Service
+@Deprecated
 public class ColumnDefinedService extends BaseService<Integer,ColumnDefined> implements
 		IColumnDefinedService {
 

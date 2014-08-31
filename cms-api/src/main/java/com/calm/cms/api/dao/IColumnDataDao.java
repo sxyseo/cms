@@ -1,8 +1,7 @@
 package com.calm.cms.api.dao;
 
-import org.hibernate.SQLQuery;
-
 import com.calm.framework.common.dao.IBaseDao;
+import org.hibernate.SQLQuery;
 
 public interface IColumnDataDao extends IBaseDao{
 

@@ -51,7 +51,8 @@ public class TableDefinedProcessor implements FieldProcessor {
 					sql.append("SELECT TABLE_.* from (");
 					sql.append(loadById.getSqlText());
 					sql.append(" ) table_ WHERE 1=1 and table_.");
-					sql.append(tableColumn.getRelationColumn());
+					//// TODO
+//					sql.append(tableColumn.getRelationColumn());
 					sql.append("=?");
 					return sql.toString();
 				}
@@ -82,7 +83,8 @@ public class TableDefinedProcessor implements FieldProcessor {
 					sql.append("SELECT TABLE_.* from (");
 					sql.append(relTable.getSqlText());
 					sql.append(" ) table_ WHERE 1=1 and table_.");
-					sql.append(tableColumn.getRelationColumn());
+					//// TODO
+//					sql.append(tableColumn.getRelationColumn());
 					sql.append("=?");
 					return sql.toString();
 				}
@@ -98,14 +100,14 @@ public class TableDefinedProcessor implements FieldProcessor {
 				List<String> columnStr = new ArrayList<>();
 				for (TableColumn tc : columns) {
 					columnStr
-							.add(tc.getId().getColumnDefined().getColumnName());
+							.add(tc.getId().getId());
 				}
 
 				List<TableColumn> columns2 = loadById.getColumns();
 				List<String> columnRel = new ArrayList<>();
 				for (TableColumn tc : columns2) {
-					String columnName = tc.getId().getColumnDefined()
-							.getColumnName();
+					String columnName = tc
+							.getId().getId();
 					if (columnStr.contains(columnName)) {
 						columnRel.add(columnName);
 					}
@@ -190,7 +192,8 @@ public class TableDefinedProcessor implements FieldProcessor {
 				sql.append("SELECT TABLE_.* from (");
 				sql.append(loadById.getSqlText());
 				sql.append(" ) table_ WHERE 1=1 and table_.");
-				sql.append(tableColumn.getRelationColumn());
+				// TODO
+//				sql.append(tableColumn.getRelationColumn());
 				sql.append("=?");
 				return sql.toString();
 			}
@@ -225,7 +228,8 @@ public class TableDefinedProcessor implements FieldProcessor {
 				sql.append("SELECT TABLE_.* from (");
 				sql.append(relTable.getSqlText());
 				sql.append(" ) table_ WHERE 1=1 and table_.");
-				sql.append(tableColumn.getRelationColumn());
+				//// TODO
+//				sql.append(tableColumn.getRelationColumn());
 				sql.append("=?");
 				return sql.toString();
 			}
@@ -241,14 +245,14 @@ public class TableDefinedProcessor implements FieldProcessor {
 			List<String> columnStr = new ArrayList<>();
 			for (TableColumn tc : columns) {
 				columnStr
-						.add(tc.getId().getColumnDefined().getColumnName());
+						.add(tc.getId().getId());
 			}
 
 			List<TableColumn> columns2 = loadById.getColumns();
 			List<String> columnRel = new ArrayList<>();
 			for (TableColumn tc : columns2) {
-				String columnName = tc.getId().getColumnDefined()
-						.getColumnName();
+				String columnName = tc
+						.getId().getId();
 				if (columnStr.contains(columnName)) {
 					columnRel.add(columnName);
 				}

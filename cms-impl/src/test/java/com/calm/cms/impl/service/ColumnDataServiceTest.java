@@ -10,11 +10,9 @@ import org.junit.Test;
 
 import com.calm.cms.api.entity.ColumnData;
 import com.calm.cms.api.entity.ColumnDataKey;
-import com.calm.cms.api.entity.ColumnDefined;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.service.IColumnDataService;
-import com.calm.cms.api.service.IColumnDefinedService;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.test.FrameworkTest;
@@ -24,8 +22,8 @@ public class ColumnDataServiceTest extends FrameworkTest {
 	private IColumnDataService columnDataService;
 	@Resource
 	private ITableColumnService tcService;
-	@Resource
-	private IColumnDefinedService cdService;
+//	@Resource
+//	private IColumnDefinedService cdService;
 	@Resource
 	private ITableDefinedService tdService;
 
@@ -36,9 +34,9 @@ public class ColumnDataServiceTest extends FrameworkTest {
 		ColumnDataKey cdk = new ColumnDataKey();
 		cdk.setId(1);
 		TableDefined table = tdService.loadByProperty("name", "老师_学生");
-		ColumnDefined column = cdService.loadByProperty("columnName", "XUE_SHENG_BIAN_HAO");
+//		ColumnDefined column = cdService.loadByProperty("columnName", "XUE_SHENG_BIAN_HAO");
 
-		cdk.setTableColumn(new TableColumn(table, column));
+		cdk.setTableColumn(new TableColumn(table, "XUE_SHENG_BIAN_HAO"));
 		cd.setId(cdk);
 		cd.setValueText("1");
 		columnDataService.add(cd);

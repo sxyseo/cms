@@ -1,21 +1,9 @@
 package com.calm.cms.api.entity;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-
 import com.calm.framework.common.entity.BaseEntity;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "TABLE_DEFINED")
@@ -41,6 +29,13 @@ public class TableDefined implements BaseEntity<Integer> {
 	@Column(name = "TABLE_TYPE")
 	@Enumerated(EnumType.STRING)
 	private TableType tableType;
+	public TableDefined() {
+	}
+	
+	public TableDefined(Integer id) {
+		super();
+		this.id = id;
+	}
 
 	public Integer getId() {
 		return id;

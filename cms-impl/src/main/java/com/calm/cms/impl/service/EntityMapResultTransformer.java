@@ -9,14 +9,12 @@ import org.hibernate.transform.AliasedTupleSubsetResultTransformer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.calm.cms.api.entity.ColumnDefined;
 import com.calm.cms.api.entity.FieldType;
 import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableColumnKey;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.processor.FieldProcessor;
-import com.calm.cms.api.service.IColumnDefinedService;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.cms.impl.processor.TableDefinedProcessor;
@@ -37,8 +35,8 @@ public class EntityMapResultTransformer extends
 
 	@Resource
 	private ITableColumnService tcService;
-	@Resource
-	private IColumnDefinedService cdService;
+//	@Resource
+//	private IColumnDefinedService cdService;
 	@Resource
 	private ITableDefinedService tdService;
 	@Resource
@@ -72,11 +70,10 @@ public class EntityMapResultTransformer extends
 				if (key.equals("TABLE_ID")) {
 					continue;
 				}
-				ColumnDefined column = cdService.loadByProperty("columnName",
-						key);
-				TableColumn tableColumn = tcService
-						.loadById(new TableColumnKey(table, column));
-				FieldType processor = column.getProcessor();
+//				ColumnDefined column = cdService.loadByProperty("columnName",
+//						key);
+				TableColumn tableColumn = tcService.loadById(new TableColumnKey(table, key));
+				FieldType processor = tableColumn.getProcessor();
 				ProcessorType type = processor.getType();
 				String processId = processor.getProcessId();
 				FieldProcessor bean = context.getBean(processId,
