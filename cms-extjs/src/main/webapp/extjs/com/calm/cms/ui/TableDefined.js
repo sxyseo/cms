@@ -72,7 +72,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
      	                    editorWindow.show();
      	                }
      	            },{
-   					 iconCls: 'edit',
+   					iconCls: 'edit',
  	                tooltip: '修改',
  	                handler: function(grid, rowIndex, colIndex) {
  	                	//获得对话框
@@ -318,7 +318,18 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 				},{
 					text: '默认值',
 					dataIndex: 'defaultValue',
-					width:100
+					width:100,
+					renderer: function(value,metaData ,record ){
+						var relation=record.get('relation');
+						var processorType=record.get('processorType');
+						if(processorType=='TABLE'){
+							return "";
+						}
+						if(relation=='ONE2ONE'){
+							return value;
+						}
+				        return '';
+				    }
 				},{
 					text: '必要',
 					dataIndex: 'required',
@@ -330,11 +341,38 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 						iconCls: 'edit',
 						tooltip: '修改',
 						handler: function(grid, rowIndex, colIndex) {
+							//获得对话框
+    	                	var editorWindow=me.createTableColumnEditorWindow();
+    	                	
+                        	//获得表单在的panel
+    	                	var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
+    	                	//获得选中的数据
+    	                    var rec = grid.getStore().getAt(rowIndex);
+    	                    //获得表单，并把数据加载到表单内
+    	                    var form=detailPanel.getForm();
+    	                    form.url='cms/tableColumn/update';
+    	                    form.loadRecord(rec);
+    	                    var field=form.findField("columnName");
+    	                    field.readOnly = true;
+    	                    form.findField('processorId').value=rec.get('processorId');
+    	                    
+    	                    editorWindow.show();
+    	                    
 						}
 					},{
 						iconCls: 'remove',
 						tooltip: '删除',
 						handler: function(grid, rowIndex, colIndex) {
+							Ext.Msg.confirm("系统信息","你确定要删除?",function(buttonId,text,opt){
+    	                		if(buttonId=='yes'){
+    	                			var rec = grid.getStore().getAt(rowIndex);
+    	                			com.calm.platform.Utils.requestAjax('cms/tableColumn/delete',{tableId: rec.get('tableId'),id: rec.get('columnName')},function(){
+    	                				var tableColWin=Ext.getCmp('cms-table-defined-table-column-win');
+    	                				grid.getStore().load({params:{tableId:tableColWin.tableId}});
+//    	                				grid.getView().refresh();
+    	                			});
+    	                		}
+    	                	});
 						}
 					}]
 				}],
@@ -358,7 +396,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 			});
 			win = desktop.createWindow({
 				id: 'cms-table-defined-table-column-win',
-				title: '详细信息',
+				title: '模型项目',
 				width:830,
 				height:500,
 				modal:true,
@@ -395,11 +433,13 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					xtype:'hiddenfield',
 					fieldLabel:'模型ID'
         		},{
+					name: 'columnName',
+				    fieldLabel:'列名',
+				    regex : /^(([a-z]|[A-Z]|_)([a-z]|[A-Z]|_|[0-9])*)$/,
+				    regexText : '列名只能以a-z或A-Z或_开头切只能包含字母数字和下划线(_)!'
+				},{
 					name: 'name',
 				    fieldLabel:'名称'
-				},{
-					name: 'columnName',
-				    fieldLabel:'列名'
 				},{
 					xtype:'fieldcontainer',
 					layout: 'hbox',
@@ -416,14 +456,32 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					    typeAhead:true,
 					    editable: false,
 					    store:Ext.create('Ext.data.Store', {
-					    	fields:['id', 'name'],
-					    	data : [{"id":"ONE2ONE", "name":"一个"},{"id":"ONE2MANY", "name":"多个"}]
-					    })
+					    	fields : ['id', 'name'],
+					    	data : [{"id" : "ONE2ONE", "name" : "一个"},{"id" : "ONE2MANY", "name" : "多个"}]
+					    }),
+					    listeners:{
+					    	change:function(combo,  newValue, oldValue, eOpts){
+					    		var editorWindow=Ext.getCmp('cms-table-defined-table-column-editor-win');
+					    		var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
+					    		var form=detailPanel.getForm();
+					    		var field=form.findField('processorId');
+					    		var store=field.getStore();
+					    		if('ONE2ONE' == newValue){
+					    			store.load();
+					    		}else if('ONE2MANY' == newValue){
+					    			store.load({params:{type:'TABLE'}});
+					    		}
+					    	},
+					    	select:function(combo, value, option){
+//					    		alert(value);
+					    	}
+					    }
 					},{
 						name: 'processorId',
 						xtype:'combobox',
 						margins: '0 0 0 6',
 						flex: 1,
+						allowBlank:false,
 						forceSelection: true, 
 					    queryMode: 'local',
 					    displayField: 'name',
@@ -432,10 +490,10 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					    store:Ext.create('Ext.data.Store', {
 					    	fields:['id', 'name','type'],
 					    	model: 'com.calm.cms.module.FieldType',
-					    	autoLoad:true,
+//					    	autoLoad:true,
 					    	proxy: {
 			                    type: 'ajax',
-			                    url : 'cms/fieldType/listWithFilterName',
+			                    url : 'cms/fieldType/listWithFilterType',
 			                    reader: {
 			                        type: 'json',
 			                        root: 'list'
@@ -443,8 +501,24 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 			                }
 					    }),
 					    listeners:{
+					    	change:function(combo,  newValue, oldValue, eOpts){
+					    		var data=combo.getStore().getById(newValue);
+					    		if(data){
+					    			var editorWindow=Ext.getCmp('cms-table-defined-table-column-editor-win');
+						    		var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
+						    		var form=detailPanel.getForm();
+						    		var field=form.findField('defaultValue');
+						    		var relation=form.findField('relation');
+						    		if(data.data.type=='SIMPLE' && relation.getValue()=='ONE2ONE'){
+						    			field.show();
+						    		}else{
+						    			field.hide();
+						    		}
+					    		}
+//					    		alert(data);
+					    	},
 					    	select:function(combo, value, option){
-					    		alert(value);
+//					    		alert(value);
 					    	}
 					    }
 					}]
@@ -488,7 +562,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         	});
             win = desktop.createWindow({
                 id: 'cms-table-defined-table-column-editor-win',
-                title: '详细信息',
+                title: '模型项目详细信息',
                 width:440,
                 height:300,
                 modal:true,

@@ -40,24 +40,30 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		dbEentity.setDescription(newEntity.getDescription());
 		dbEentity.setName(newEntity.getName());
 	}
-
-	@Override
-	public void updateSqlText(TableDefined table) {
+	
+	private void updateSqlText(TableDefined table,TableColumn temp,boolean deleteFlag) {
 		TableDefined loadById = loadById(table.getId());
 		List<TableColumn> columns = loadById.getColumns();
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT CD.ID,CD.TABLE_ID ");
+		sql.append("SELECT CD.ID AS ID_,CD.TABLE_ID AS TABLE_ID_");
 		for (TableColumn tct : columns) {
+			if(deleteFlag && tct.equals(temp)){
+				continue;
+			}
 //			ColumnDefined cd = tct.getId().getColumnDefined();
-			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = " + tct.getId().getId()
-					+ " THEN CD.VALUE_TEXT ELSE NULL END ) "
+			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = '" + tct.getId().getId()
+					+ "' THEN CD.VALUE_TEXT ELSE NULL END ) "
 					+ tct.getId().getId());
 		}
-
+		if(!deleteFlag){
+			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = '" + temp.getId().getId()
+					+ "' THEN CD.VALUE_TEXT ELSE NULL END ) "
+					+ temp.getId().getId());
+		}
 		sql.append(" FROM COLUMN_DATA CD WHERE CD.TABLE_ID=" + table.getId()
 				+ " GROUP BY CD.ID,CD.TABLE_ID");
 		loadById.setSqlText(sql.toString());
-		update(loadById);
+		baseDao.update(loadById);
 
 	}
 
@@ -66,6 +72,17 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		Query<Integer,TableDefined> query = createQuery();
 		query.eq("tableType", TableType.DATA);
 		return query.list();
+	}
+
+	@Override
+	public void updateSqlTextForAddColumn(TableDefined table, TableColumn temp) {
+		updateSqlText(table,temp,false);
+	}
+
+	@Override
+	public void updateSqlTextForDeleteColumn(TableDefined table,
+			TableColumn temp) {
+		updateSqlText(table,temp,true);
 	}
 
 }

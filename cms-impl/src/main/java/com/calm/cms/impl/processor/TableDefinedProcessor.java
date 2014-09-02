@@ -20,7 +20,7 @@ import com.calm.cms.api.service.IColumnDataService;
 import com.calm.cms.api.service.ITableDefinedService;
 
 @Service
-public class TableDefinedProcessor implements FieldProcessor {
+public class TableDefinedProcessor implements FieldProcessor<Map<String, Object>> {
 	private Integer tableId;
 	@Resource
 	private IColumnDataService columnDataService;
@@ -38,7 +38,7 @@ public class TableDefinedProcessor implements FieldProcessor {
 	}
 
 	@Override
-	public List<?> getList(final Integer id, final TableColumn tableColumn) {
+	public List<Map<String, Object>> getList(final Integer id, final TableColumn tableColumn) {
 		Relation relation = tableColumn.getRelation();
 		final TableDefined loadById = tdService.loadById(tableId);
 		List<Map<String, Object>> list = null;
@@ -169,15 +169,15 @@ public class TableDefinedProcessor implements FieldProcessor {
 	}
 
 	@Override
-	public Object get(Integer rowId, Object value, TableColumn tableColumn) {
+	public Map<String, Object> get(Integer rowId, Object value, TableColumn tableColumn) {
 		Relation relation = tableColumn.getRelation();
 		switch (relation) {
 		case ONE2ONE:
 			break;
 		case ONE2MANY:
-			return loadOne2many(rowId, tableColumn);
+			return loadOne2many(rowId, tableColumn).get(0);
 		case MANY2MANY:
-			return loadMany2many(rowId, tableColumn);
+			return loadMany2many(rowId, tableColumn).get(0);
 		}
 		return null;
 	}

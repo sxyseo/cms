@@ -28,6 +28,6 @@ public class TableColumnServiceTest extends FrameworkTest {
 //				"columnName", "LAO_SHI_BIAN_HAO");
 		TableColumn tc = new TableColumn(table, "LAO_SHI_BIAN_HAO");
 		tableColumnService.add(tc);
-		tableDefinedService.updateSqlText(table);
+//		tableDefinedService.updateSqlText(table,tc,true);
 	}
 }

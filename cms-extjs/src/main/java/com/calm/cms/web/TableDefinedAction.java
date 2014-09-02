@@ -84,6 +84,7 @@ public class TableDefinedAction extends
 			if(processor!=null){
 				tco.setProcessorId(processor.getId());
 				tco.setProcessorName(processor.getName());
+				tco.setProcessorType(processor.getType());
 			}
 			
 			Relation relation = tc.getRelation();

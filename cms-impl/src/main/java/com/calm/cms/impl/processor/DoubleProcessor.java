@@ -8,15 +8,15 @@ import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.processor.FieldProcessor;
 
 @Service
-public class DoubleProcessor implements FieldProcessor {
+public class DoubleProcessor implements FieldProcessor<Double> {
 
 	@Override
-	public List<?> getList(Integer id, TableColumn tableColumn) {
+	public List<Double> getList(Integer id, TableColumn tableColumn) {
 		return null;
 	}
 
 	@Override
-	public Object get(Integer rowId, Object value, TableColumn tableColumn) {
+	public Double get(Integer rowId, Object value, TableColumn tableColumn) {
 		if (value == null) {
 			return null;
 		}

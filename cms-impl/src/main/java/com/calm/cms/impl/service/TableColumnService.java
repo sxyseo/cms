@@ -25,6 +25,11 @@ public class TableColumnService extends BaseService<TableColumnKey,TableColumn> 
 		return TableColumn.class;
 	}
 	@Override
+	public void add(TableColumn t) {
+		super.add(t);
+		tableDefinedService.updateSqlTextForAddColumn(t.getId().getTableDefined(),t);
+	}
+	@Override
 	protected void preAdd(TableColumn newEntity) {
 		Relation relation = newEntity.getRelation();
 		if (relation == null) {
@@ -32,28 +37,9 @@ public class TableColumnService extends BaseService<TableColumnKey,TableColumn> 
 			newEntity.setRelation(relation);
 		}
 	}
-
-	// private void makeRelation(TableColumn t) {
-	// TableColumnKey id = t.getId();
-	// TableDefined tableDefined = id.getTableDefined();
-	// ColumnDefined columnDefined = id.getColumnDefined();
-	// String processor = columnDefined.getProcessor();
-	// FieldProcessor fieldProcessor = ProcessorUtils.getFieldProcessor(
-	// processor, context);
-	// if (fieldProcessor instanceof TableDefinedProcessor) {
-	// Integer tableId = ((TableDefinedProcessor) fieldProcessor)
-	// .getTableId();
-	// TableDefined loadById = tableDefinedService.loadById(tableId);
-	// TableDefined td = new TableDefined();
-	// Integer id2 = tableDefined.getId();
-	// if (id2 > tableId) {
-	// td.setName(tableDefined.getName() + "_" + loadById.getName());
-	// } else {
-	// td.setName(loadById.getName() + "_" + tableDefined.getName());
-	// }
-	// tableDefinedService.add(td);
-	// } else {
-	//
-	// }
-	// }
+	@Override
+	public void delete(TableColumn t) {
+		super.delete(t);
+		tableDefinedService.updateSqlTextForDeleteColumn(t.getId().getTableDefined(),t);
+	}
 }

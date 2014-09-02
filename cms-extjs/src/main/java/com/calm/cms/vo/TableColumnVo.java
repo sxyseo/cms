@@ -1,5 +1,7 @@
 package com.calm.cms.vo;
 
+import com.calm.cms.api.entity.ProcessorType;
+
 
 public class TableColumnVo {
 	private Integer tableId;
@@ -11,6 +13,7 @@ public class TableColumnVo {
 	private Boolean required;
 	private Integer processorId;
 	private String processorName;
+	private ProcessorType processorType;
 	public TableColumnVo() {
 	}
 	public TableColumnVo(String columnName, Integer tableId) {
@@ -85,6 +88,12 @@ public class TableColumnVo {
 	}
 	public void setRelationName(String relationName) {
 		this.relationName = relationName;
+	}
+	public ProcessorType getProcessorType() {
+		return processorType;
+	}
+	public void setProcessorType(ProcessorType processorType) {
+		this.processorType = processorType;
 	}
 	
 }

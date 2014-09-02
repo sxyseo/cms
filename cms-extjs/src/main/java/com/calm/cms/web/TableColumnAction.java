@@ -32,8 +32,11 @@ public class TableColumnAction extends
 
 	@RequestMapping(value="update",method={RequestMethod.POST})
 	@ResponseBody
-	public Object update(String columnName,Integer tableId, TableColumn entity, Model model) {
-		return super.update(new TableColumnKey(new TableDefined(tableId), columnName), entity, model);
+	public Object update(TableColumnVo tcv, TableColumn entity, Model model) {
+		TableColumnKey tableColumnKey = new TableColumnKey(new TableDefined(tcv.getTableId()), tcv.getColumnName());
+		entity.setId(tableColumnKey);
+		entity.setProcessor(new FieldType(tcv.getProcessorId()));
+		return super.update(tableColumnKey, entity, model);
 	}
 	
 	@RequestMapping("delete")

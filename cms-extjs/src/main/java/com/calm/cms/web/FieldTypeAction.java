@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.calm.cms.api.entity.FieldType;
+import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.service.IFieldTypeService;
 import com.calm.extjs.common.BaseCurdAction;
 
@@ -19,11 +20,11 @@ import com.calm.extjs.common.BaseCurdAction;
 public class FieldTypeAction extends
 		BaseCurdAction<Integer, FieldType, IFieldTypeService> {
 
-	@RequestMapping("listWithFilterName")
+	@RequestMapping("listWithFilterType")
 	@ResponseBody
-	public Object listWithFilter(String name) {
+	public Object listWithFilter(ProcessorType type) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<FieldType> list = getService().listByPropertyLike("name", name);
+		List<FieldType> list = getService().listByType(type);
 		result.put(LIST, list);
 		return result;
 	}

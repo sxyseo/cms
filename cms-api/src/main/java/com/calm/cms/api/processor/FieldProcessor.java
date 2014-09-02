@@ -4,10 +4,10 @@ import com.calm.cms.api.entity.TableColumn;
 
 import java.util.List;
 
-public interface FieldProcessor {
+public interface FieldProcessor<T> {
 
-	List<?> getList(Integer id, TableColumn tableColumn);
+	List<T> getList(Integer id, TableColumn tableColumn);
 
-	Object get(Integer rowId, Object value, TableColumn tableColumn);
+	T get(Integer rowId, Object value, TableColumn tableColumn);
 
 }
