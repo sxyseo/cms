@@ -230,6 +230,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					},{
 						name: 'name',
 					    fieldLabel:'模型名称',
+					    allowBlank:false,
 					    width:60
 					},{
 					   fieldLabel: '描述',
@@ -435,10 +436,12 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         		},{
 					name: 'columnName',
 				    fieldLabel:'列名',
+				    allowBlank:false,
 				    regex : /^(([a-z]|[A-Z]|_)([a-z]|[A-Z]|_|[0-9])*)$/,
 				    regexText : '列名只能以a-z或A-Z或_开头切只能包含字母数字和下划线(_)!'
 				},{
 					name: 'name',
+					allowBlank:false,
 				    fieldLabel:'名称'
 				},{
 					xtype:'fieldcontainer',
@@ -498,6 +501,19 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 			                        type: 'json',
 			                        root: 'list'
 			                    }
+			                },
+			                listeners:{
+			                	load:function( store, records, successful, eOpts ){
+			                		if(records && records.length){
+			                			var editorWindow=Ext.getCmp('cms-table-defined-table-column-editor-win');
+							    		var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
+							    		var form=detailPanel.getForm();
+							    		var field=form.findField('processorId');
+							    		if(!field.getValue()){
+							    			field.setValue(records[0].get('id'));
+							    		}
+			                		}
+			                	}
 			                }
 					    }),
 					    listeners:{
@@ -515,10 +531,8 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 						    			field.hide();
 						    		}
 					    		}
-//					    		alert(data);
 					    	},
 					    	select:function(combo, value, option){
-//					    		alert(value);
 					    	}
 					    }
 					}]

@@ -2,11 +2,16 @@ package com.calm.cms.impl.service;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
+import com.calm.cms.api.entity.FieldType;
+import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.entity.TableType;
+import com.calm.cms.api.service.IFieldTypeService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.common.dao.Query;
 import com.calm.framework.common.exception.EntityAlreadyExistException;
@@ -15,6 +20,8 @@ import com.calm.framework.common.service.impl.BaseService;
 @Service
 public class TableDefinedService extends BaseService<Integer,TableDefined> implements
 		ITableDefinedService {
+	@Resource
+	private IFieldTypeService fieldTypeService;
 	@Override
 	protected void queryPaging(Query<Integer,TableDefined> query, TableDefined ui) {
 		query.eq("tableType", TableType.DATA);
@@ -24,7 +31,17 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 	public Class<TableDefined> getEntityClass() {
 		return TableDefined.class;
 	}
-
+	@Override
+	public void add(TableDefined t) {
+		super.add(t);
+		FieldType ft=new FieldType();
+		ft.setDeleteClass(false);
+		ft.setName(t.getName());
+		ft.setProcessId("tableDefinedProcessor");
+		ft.setTableDefinedId(t.getId());
+		ft.setType(ProcessorType.TABLE);
+		fieldTypeService.add(ft);
+	}
 	@Override
 	protected void preAdd(TableDefined newEntity) {
 		Query<Integer,TableDefined> query = createQuery();
@@ -34,7 +51,16 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 			throw new EntityAlreadyExistException(newEntity);
 		}
 	}
-
+	@Override
+	protected void preDelete(TableDefined dbEentity, TableDefined newEntity) {
+		Query<Integer, FieldType> query = fieldTypeService.createQuery();
+		query.eq("processId", "tableDefinedProcessor");
+		query.eq("tableDefinedId", dbEentity.getId());
+		FieldType load = query.load();
+		if(load!=null){
+			fieldTypeService.delete(load);
+		}
+	}
 	@Override
 	protected void preUpdate(TableDefined dbEentity, TableDefined newEntity) {
 		dbEentity.setDescription(newEntity.getDescription());
