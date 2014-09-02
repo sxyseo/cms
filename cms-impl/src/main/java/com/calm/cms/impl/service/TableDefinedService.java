@@ -70,7 +70,7 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		query.eq("processId", "tableDefinedProcessor");
 		query.eq("tableDefinedId", dbEentity.getId());
 		FieldType load = query.load();
-		if(load!=null){
+		if (load != null) {
 			fieldTypeService.delete(load);
 		}
 	}
@@ -78,6 +78,15 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 	protected void preUpdate(TableDefined dbEentity, TableDefined newEntity) {
 		dbEentity.setDescription(newEntity.getDescription());
 		dbEentity.setName(newEntity.getName());
+		
+		Query<Integer, FieldType> query = fieldTypeService.createQuery();
+		query.eq("processId", "tableDefinedProcessor");
+		query.eq("tableDefinedId", dbEentity.getId());
+		FieldType load = query.load();
+		if (load != null) {
+			load.setName(newEntity.getName());
+			fieldTypeService.update(load);
+		}
 	}
 	
 	private void updateSqlText(TableDefined table,TableColumn temp,boolean deleteFlag) {
@@ -108,20 +117,20 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 
 	@Override
 	public List<TableDefined> listAllDataTable() {
-		Query<Integer,TableDefined> query = createQuery();
+		Query<Integer, TableDefined> query = createQuery();
 		query.eq("tableType", TableType.DATA);
 		return query.list();
 	}
 
 	@Override
 	public void updateSqlTextForAddColumn(TableDefined table, TableColumn temp) {
-		updateSqlText(table,temp,false);
+		updateSqlText(table, temp, false);
 	}
 
 	@Override
 	public void updateSqlTextForDeleteColumn(TableDefined table,
 			TableColumn temp) {
-		updateSqlText(table,temp,true);
+		updateSqlText(table, temp, true);
 	}
 
 }

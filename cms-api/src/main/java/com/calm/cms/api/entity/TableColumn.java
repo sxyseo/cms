@@ -36,6 +36,15 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	@Column(name = "REQUIRED")
 	private Boolean required;
 
+	@Column(name = "ORDER_INDEX")
+	private Integer orderIndex;
+	
+	@Column(name = "RELATION_TABLE_ID")
+	private TableDefined relationTableDefined;
+	
+	@Column(name = "RELATION_COLUMN")
+	private String relationColumn;
+	
 	public TableColumn() {
 	}
 
@@ -135,6 +144,30 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Integer getOrderIndex() {
+		return orderIndex;
+	}
+
+	public void setOrderIndex(Integer orderIndex) {
+		this.orderIndex = orderIndex;
+	}
+
+	public String getRelationColumn() {
+		return relationColumn;
+	}
+
+	public void setRelationColumn(String relationColumn) {
+		this.relationColumn = relationColumn;
+	}
+
+	public TableDefined getRelationTableDefined() {
+		return relationTableDefined;
+	}
+
+	public void setRelationTableDefined(TableDefined relationTableDefined) {
+		this.relationTableDefined = relationTableDefined;
 	}
 	
 }
