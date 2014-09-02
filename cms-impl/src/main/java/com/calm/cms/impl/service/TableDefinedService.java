@@ -12,9 +12,11 @@ import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.entity.TableType;
 import com.calm.cms.api.service.IFieldTypeService;
+import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.common.dao.Query;
 import com.calm.framework.common.exception.EntityAlreadyExistException;
+import com.calm.framework.common.exception.FrameworkExceptioin;
 import com.calm.framework.common.service.impl.BaseService;
 
 @Service
@@ -22,6 +24,10 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		ITableDefinedService {
 	@Resource
 	private IFieldTypeService fieldTypeService;
+	
+	@Resource
+	private ITableColumnService tableColumnService;
+	
 	@Override
 	protected void queryPaging(Query<Integer,TableDefined> query, TableDefined ui) {
 		query.eq("tableType", TableType.DATA);
@@ -53,6 +59,13 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 	}
 	@Override
 	protected void preDelete(TableDefined dbEentity, TableDefined newEntity) {
+		
+		List<TableColumn> listByProperty = tableColumnService.listByProperty("id.tableDefined", dbEentity);
+		
+		if (listByProperty.size() > 0) {
+			throw new FrameworkExceptioin("CMS_E_00002");
+		}
+		
 		Query<Integer, FieldType> query = fieldTypeService.createQuery();
 		query.eq("processId", "tableDefinedProcessor");
 		query.eq("tableDefinedId", dbEentity.getId());
