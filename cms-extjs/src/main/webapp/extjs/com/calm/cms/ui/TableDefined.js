@@ -317,7 +317,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 				},{
 					text: '类型',
 					dataIndex: 'processorName',
-					width:100
+					width:90
 				},{
 					text: '默认值',
 					dataIndex: 'defaultValue',
@@ -339,7 +339,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					width:50
 				},{
 					xtype:'actioncolumn',
-					width:60,
+					width:70,
 					items: [{
 						iconCls: 'edit',
 						tooltip: '修改',
@@ -361,6 +361,28 @@ Ext.define('com.calm.cms.ui.TableDefined', {
     	                    
     	                    editorWindow.show();
     	                    
+						}
+					},{
+						iconCls:'arrow-up',
+						tooltip:'向上',
+						handler : function(grid,rowIndex,colIndex){
+							var rec = grid.getStore().getAt(rowIndex);
+							com.calm.platform.Utils.requestAjax('cms/tableColumn/order',{tableId: rec.get('tableId'),id: rec.get('columnName'),up:true},function(){
+                				var tableColWin=Ext.getCmp('cms-table-defined-table-column-win');
+                				grid.getStore().load({params:{tableId:tableColWin.tableId}});
+//                				grid.getView().refresh();
+                			});
+						}
+					},{
+						iconCls:'arrow-down',
+						tooltip:'向下',
+						handler : function(grid,rowIndex,colIndex){
+							var rec = grid.getStore().getAt(rowIndex);
+							com.calm.platform.Utils.requestAjax('cms/tableColumn/order',{tableId: rec.get('tableId'),id: rec.get('columnName'),up:false},function(){
+                				var tableColWin=Ext.getCmp('cms-table-defined-table-column-win');
+                				grid.getStore().load({params:{tableId:tableColWin.tableId}});
+//                				grid.getView().refresh();
+                			});
 						}
 					},{
 						iconCls: 'remove',
@@ -462,26 +484,29 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					    editable: false,
 					    store:Ext.create('Ext.data.Store', {
 					    	fields : ['id', 'name'],
-					    	data : [{"id" : "ONE2ONE", "name" : "一对一"},{"id" : "ONE2MANY", "name" : "一对多"},{"id" : "MANY2MANY", "name" : "多对多"}]
+					    	data : [{"id" : "ONE2ONE", "name" : "一对一"},{"id" : "ONE2MANY", "name" : "一对多"},{"id" : "MANY2ONE", "name" : "多对一"},{"id" : "MANY2MANY", "name" : "多对多"}]
 					    }),
 					    listeners:{
 					    	change:function(combo,  newValue, oldValue, eOpts){
 					    		var editorWindow=Ext.getCmp('cms-table-defined-table-column-editor-win');
 					    		var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
 					    		var form=detailPanel.getForm();
-					    		var field=form.findField('processorId');
-					    		var store=field.getStore();
+					    		var processorId=form.findField('processorId');
+					    		var store=processorId.getStore();
 					    		if('ONE2ONE' == newValue){
 					    			store.load();
 					    		}else if('ONE2MANY' == newValue){
 					    			store.load({params:{type:'TABLE'}});
 					    		}else if('MANY2MANY' == newValue){
 					    			store.load({params:{type:'TABLE'}});
+					    		}else if('MANY2ONE' == newValue){
+					    			store.load({params:{type:'TABLE'}});
 					    		}
 					    	}
 					    }
 					},{
 						name: 'processorId',
+						itemId:'processorId',
 						xtype:'combobox',
 						margins: '0 0 0 6',
 						flex: 1,
@@ -508,20 +533,22 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 			                			var editorWindow=Ext.getCmp('cms-table-defined-table-column-editor-win');
 							    		var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
 							    		var form=detailPanel.getForm();
-							    		var field=form.findField('processorId');
-							    		if(field.getValue()){
-							    			var store=field.getStore();
-							    			var rec=store.getById(field.getValue());
-							    			if(!rec){
-							    				var f=store.first();
-							    				if(f){
-							    					field.setValue(f.get('id'));
-							    				}
+							    		var processorId=form.findField('processorId');
+							    		var data;
+							    		if(processorId.getValue()){
+							    			var store=processorId.getStore();
+							    			data=store.getById(processorId.getValue());
+							    			if(!data){
+							    				data=store.first();
 							    			}
 							    		}else{
-							    			field.setValue(records[0].get('id'));
+							    			data = records[0];
 							    		}
+							    		if(data){
+					    					processorId.setValue(data.get('id'));
+					    				}
 							    		
+							    		me.responseColumn(data,processorId);
 			                		}
 			                	}
 			                }
@@ -529,36 +556,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					    listeners:{
 					    	change:function(combo,  newValue, oldValue, eOpts){
 					    		var data=combo.getStore().getById(newValue);
-					    		if(data){
-					    			var editorWindow=Ext.getCmp('cms-table-defined-table-column-editor-win');
-						    		var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
-						    		var form=detailPanel.getForm();
-						    		var field=form.findField('defaultValue');
-						    		var relation=form.findField('relation');
-						    		var relationColumn=form.findField('relationColumn');
-						    		if(relation.getValue()=='ONE2ONE'){
-						    			if(data.data.type=='SIMPLE'){
-							    			field.show();
-							    		}else{
-							    			field.hide();
-							    		}
-						    			relationColumn.hide();
-						    			relationColumn.allowBlank=true;
-						    		} else if(relation.getValue()=='ONE2MANY'){
-						    			field.hide();
-						    			relationColumn.show();
-						    			relationColumn.allowBlank=false;
-						    			if(combo.valueModels.length){
-						    				relationColumn.getStore().load({params:{tableId:combo.valueModels[0].get('tableDefinedId')}});
-						    			}
-						    			
-						    		} else if(relation.getValue()=='MANY2MANY'){
-						    			field.hide();
-						    			relationColumn.hide();
-						    			relationColumn.allowBlank=true;
-						    		}
-						    		
-					    		}
+					    		me.responseColumn(data,combo);
 					    	},
 					    	select:function(combo, value, option){
 					    	}
@@ -655,6 +653,44 @@ Ext.define('com.calm.cms.ui.TableDefined', {
         }
         return win;
     },
-    loadTableColumns:function(fieldTypeId){
+    responseColumn:function(data,combo){
+    	if(data){
+			var editorWindow=Ext.getCmp('cms-table-defined-table-column-editor-win');
+    		var detailPanel = editorWindow.getComponent('cms-table-defined-table-column-editor-panel');
+    		var form=detailPanel.getForm();
+    		var defaultValueField=form.findField('defaultValue');
+    		var relation=form.findField('relation');
+    		var relationColumn=form.findField('relationColumn');
+    		//一对一
+    		if(relation.getValue()=='ONE2ONE'){
+    			//简单类型显示默认值，不展示管理列
+    			if(data.get('type')=='SIMPLE'){
+	    			defaultValueField.show();
+	    		}else{
+	    			defaultValueField.hide();
+	    		}
+    			relationColumn.hide();
+    			relationColumn.allowBlank=true;
+    		//一对多不展示默认值，展示关系列
+    		} else if(relation.getValue()=='ONE2MANY'){
+    			defaultValueField.hide();
+    			relationColumn.show();
+    			relationColumn.allowBlank=false;
+    			if(combo.valueModels.length){
+    				relationColumn.getStore().load({params:{tableId:combo.valueModels[0].get('tableDefinedId')}});
+    			}
+			//多对多不展示默认值，展示关系列
+    		} else if(relation.getValue()=='MANY2MANY'){
+    			defaultValueField.hide();
+    			relationColumn.hide();
+    			relationColumn.allowBlank=true;
+			//多对一不展示默认值，展示关系列
+    		} else if(relation.getValue()=='MANY2ONE'){
+    			defaultValueField.hide();
+    			relationColumn.hide();
+    			relationColumn.allowBlank=true;
+    		}
+    		
+		}
     }
 });

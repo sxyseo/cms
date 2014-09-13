@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface IFieldTypeService extends IBaseService<Integer,FieldType> {
 
-	List<FieldType> listByType(ProcessorType type);
+	List<FieldType> listByType(ProcessorType type,boolean normal);
 
 }

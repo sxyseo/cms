@@ -22,9 +22,12 @@ public class FieldTypeService extends BaseService<Integer,FieldType> implements
 	}
 
 	@Override
-	public List<FieldType> listByType(ProcessorType type) {
+	public List<FieldType> listByType(ProcessorType type,boolean normal) {
 		Query<Integer,FieldType> createQuery = createQuery();
 		createQuery.eq("type", type);
+		if(normal){
+			createQuery.normal();
+		}
 		createQuery.asc("type");
 		return createQuery.list();
 	}

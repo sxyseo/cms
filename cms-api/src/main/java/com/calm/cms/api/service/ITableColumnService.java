@@ -6,4 +6,6 @@ import com.calm.framework.common.service.IBaseService;
 
 public interface ITableColumnService extends IBaseService<TableColumnKey,TableColumn> {
 
+	void order(String id, Integer tableId, boolean up);
+
 }

@@ -72,7 +72,7 @@ public class TableDefinedAction extends
 	@ResponseBody
 	public Object listAllTableColumn(Integer tableId){
 		Map<String,Object> result=new HashMap<String, Object>();
-		List<TableColumn> columns = tableColumnService.listByProperty("id.tableDefined.id", tableId);
+		List<TableColumn> columns = tableColumnService.createQuery().eq("id.tableDefined.id", tableId).asc("orderIndex").list();
 		List<TableColumnVo> list=new ArrayList<>(columns.size());
 		TableColumnVo tco;
 		for(TableColumn tc:columns){

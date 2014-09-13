@@ -1,5 +1,8 @@
 package com.calm.cms.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -43,6 +46,14 @@ public class TableColumnAction extends
 	@ResponseBody
 	public Object delete(String id,Integer tableId, Model model) {
 		return super.delete(new TableColumnKey(new TableDefined(tableId), id), model);
+	}
+	
+	@RequestMapping("order")
+	@ResponseBody
+	public Object order(String id,Integer tableId,boolean up, Model model) {
+		Map<String,Object> result=new HashMap<>();
+		getService().order(id,tableId,up);
+		return result;
 	}
 	
 	@Resource

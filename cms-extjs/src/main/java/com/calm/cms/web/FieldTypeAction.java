@@ -24,7 +24,7 @@ public class FieldTypeAction extends
 	@ResponseBody
 	public Object listWithFilter(ProcessorType type) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		List<FieldType> list = getService().listByType(type);
+		List<FieldType> list = getService().listByType(type,true);
 		result.put(LIST, list);
 		return result;
 	}

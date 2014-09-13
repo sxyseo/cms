@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableColumnKey;
+import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.common.dao.Query;
@@ -88,5 +89,38 @@ public class TableColumnService extends BaseService<TableColumnKey, TableColumn>
 		super.delete(t);
 		tableDefinedService.updateSqlTextForDeleteColumn(t.getId()
 				.getTableDefined(), t);
+	}
+
+	@Override
+	public void order(String id, Integer tableId, boolean up) {
+		TableColumn loadById = loadById(new TableColumnKey(new TableDefined(tableId), id));
+		Integer orderIndex = loadById.getOrderIndex();
+		TableColumn next;
+		if(up){
+			Query<TableColumnKey, TableColumn> createQuery = createQuery();
+			createQuery.eq("id.tableDefined.id", tableId).lt("orderIndex", orderIndex).desc("orderIndex");
+			List<TableColumn> list = createQuery.list();
+			if(list.isEmpty()){
+				return ;
+			}
+			next = list.get(0);
+			next.setOrderIndex(next.getOrderIndex()+1);
+			orderIndex--;
+			
+		}else{
+			Query<TableColumnKey, TableColumn> createQuery = createQuery();
+			createQuery.eq("id.tableDefined.id", tableId).gt("orderIndex", orderIndex).asc("orderIndex");
+			List<TableColumn> list = createQuery.list();
+			if(list.isEmpty()){
+				return ;
+			}
+			next = list.get(0);
+			next.setOrderIndex(next.getOrderIndex()-1);
+			orderIndex++;
+		}
+		loadById.setOrderIndex(orderIndex);
+		baseDao.update(loadById);
+		baseDao.update(next);
+		
 	}
 }
