@@ -20,6 +20,7 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	@Column(name = "DEFAULT_VALUE")
 	private String defaultValue;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "RELATION")
 	private Relation relation;
 

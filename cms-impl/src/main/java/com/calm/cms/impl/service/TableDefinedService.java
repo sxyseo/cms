@@ -38,19 +38,24 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 	public Class<TableDefined> getEntityClass() {
 		return TableDefined.class;
 	}
+	
 	@Override
-	public void add(TableDefined t) {
-		super.add(t);
-		FieldType ft=new FieldType();
-		ft.setDeleteClass(false);
-		ft.setName(t.getName());
-		ft.setProcessId("tableDefinedProcessor");
-		ft.setTableDefinedId(t.getId());
-		ft.setType(ProcessorType.TABLE);
-		fieldTypeService.add(ft);
+	public void add(TableDefined newEntity) {
+		super.add(newEntity);
+		//数据表需要添加为处理类型
+		if(newEntity.getTableType()==TableType.DATA){
+			FieldType ft=new FieldType();
+			ft.setDeleteClass(false);
+			ft.setName(newEntity.getName());
+			ft.setProcessId("tableDefinedProcessor");
+			ft.setTableDefinedId(newEntity.getId());
+			ft.setType(ProcessorType.TABLE);
+			fieldTypeService.add(ft);
+		}
 	}
 	@Override
 	protected void preAdd(TableDefined newEntity) {
+		//判断名称重复
 		Query<Integer,TableDefined> query = createQuery();
 		query.eq("name", newEntity.getName());
 		List<TableDefined> list = query.list();
@@ -60,13 +65,13 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 	}
 	@Override
 	protected void preDelete(TableDefined dbEentity, TableDefined newEntity) {
-		
+		//判断表中定义有数据项目
 		List<TableColumn> listByProperty = tableColumnService.listByProperty("id.tableDefined", dbEentity);
 		
 		if (listByProperty.size() > 0) {
 			throw new FrameworkExceptioin("CMS_E_00002");
 		}
-		
+		//删除类型处理
 		Query<Integer, FieldType> query = fieldTypeService.createQuery();
 		query.eq("processId", "tableDefinedProcessor");
 		query.eq("tableDefinedId", dbEentity.getId());
@@ -99,9 +104,7 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT CD.ID AS ID_,CD.TABLE_ID AS TABLE_ID_");
 		for(TableColumn t:temp){
-			if(deleteFlag){
-				columns.remove(t);
-			}else{
+			if(!deleteFlag){
 				if(columns.contains(t)){
 					continue;
 				}else{
@@ -109,7 +112,14 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 				}
 			}
 		}
-		for (TableColumn tct : columns) {
+		b:for (TableColumn tct : columns) {
+			if(deleteFlag){
+				for(TableColumn tc:temp){
+					if(tct.equals(tc)){
+						continue b;
+					}
+				}
+			}
 			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = '" + tct.getId().getId()
 					+ "' THEN CD.VALUE_TEXT ELSE NULL END ) "
 					+ tct.getId().getId());

@@ -6,6 +6,8 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
+import com.calm.cms.api.entity.FieldType;
+import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.service.ITableColumnService;
@@ -20,7 +22,7 @@ public class TableColumnServiceTest extends FrameworkTest {
 	@Resource
 	private ITableDefinedService tableDefinedService;
 
-	@Test
+//	@Test
 	public void testAdd() {
 		assertNotNull(tableColumnService);
 		TableDefined table = tableDefinedService.loadByProperty("name", "老师_学生");
@@ -30,4 +32,21 @@ public class TableColumnServiceTest extends FrameworkTest {
 		tableColumnService.add(tc);
 //		tableDefinedService.updateSqlText(table,tc,true);
 	}
+	
+//	@Test
+	public void testAddMany2Many() {
+		assertNotNull(tableColumnService);
+		TableColumn tc=new TableColumn(new TableDefined(5),"xuesheng");
+		tc.setProcessor(new FieldType(22));
+		tc.setRelation(Relation.MANY2MANY);
+		tableColumnService.add(tc);
+	}
+	
+	@Test
+	public void testDeleteMany2Many() {
+		assertNotNull(tableColumnService);
+		TableColumn tc=new TableColumn(new TableDefined(5),"xuesheng");
+		tableColumnService.delete(tc);;
+	}
+	
 }

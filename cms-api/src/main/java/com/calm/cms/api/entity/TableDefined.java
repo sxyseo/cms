@@ -18,26 +18,27 @@ public class TableDefined implements BaseEntity<Integer> {
 	@TableGenerator(name = "CMS_TABLE_DEFINED_ID", pkColumnValue = "CMS_TABLE_DEFINED_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
 	@GeneratedValue(generator = "CMS_TABLE_DEFINED_ID", strategy = GenerationType.TABLE)
 	private Integer id;
-	
+
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
+
 	@Column(name = "SQL_TEXT", length = 1000000000)
 	private String sqlText;
-	
-	@OneToMany(fetch = FetchType.EAGER)
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { })
 	@JoinColumn(name = "TABLE_ID")
 	private List<TableColumn> columns;
-	
+
 	@Column(name = "TABLE_TYPE")
 	@Enumerated(EnumType.STRING)
 	private TableType tableType;
+
 	public TableDefined() {
 	}
-	
+
 	public TableDefined(Integer id) {
 		super();
 		this.id = id;
@@ -125,5 +126,5 @@ public class TableDefined implements BaseEntity<Integer> {
 			return false;
 		return true;
 	}
-	
+
 }
