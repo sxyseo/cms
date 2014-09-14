@@ -4,8 +4,8 @@ import com.calm.framework.common.entity.BaseEntity;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "COLUMN_DEFINED")
+//@Entity
+//@Table(name = "COLUMN_DEFINED")
 @Deprecated
 public class ColumnDefined implements BaseEntity<Integer> {
 	/**

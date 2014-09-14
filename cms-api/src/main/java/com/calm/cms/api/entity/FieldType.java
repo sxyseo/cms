@@ -13,14 +13,20 @@ public class FieldType implements BaseEntity<Integer>, LogisticDeletable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@TableGenerator(name = "FIELD_TYPE_ID", pkColumnValue = "FIELD_TYPE_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
-	@GeneratedValue(generator = "FIELD_TYPE_ID", strategy = GenerationType.TABLE)
+	@Column(name = "ID")
+	@TableGenerator(name = "CMS_FIELD_TYPE_ID", pkColumnValue = "CMS_FIELD_TYPE_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
+	@GeneratedValue(generator = "CMS_FIELD_TYPE_ID", strategy = GenerationType.TABLE)
 	private Integer id;
+
 	@Column(name = "PROCESS_ID")
 	private String processId;
+
+	@Column(name = "NAME")
 	private String name;
 
+	@Column(name = "DESCRIPTION")
 	private String description;
+
 	@Column(name = "PROCESSOR_TYPE")
 	@Enumerated(EnumType.STRING)
 	private ProcessorType type;
@@ -33,7 +39,7 @@ public class FieldType implements BaseEntity<Integer>, LogisticDeletable {
 
 	public FieldType() {
 	}
-	
+
 	public FieldType(Integer id) {
 		super();
 		this.id = id;

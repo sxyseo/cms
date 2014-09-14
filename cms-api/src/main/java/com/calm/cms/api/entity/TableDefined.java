@@ -15,18 +15,23 @@ public class TableDefined implements BaseEntity<Integer> {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "ID")
-	@TableGenerator(name = "TABLE_DEFINED_ID", pkColumnValue = "TABLE_DEFINED_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
-	@GeneratedValue(generator = "TABLE_DEFINED_ID", strategy = GenerationType.TABLE)
+	@TableGenerator(name = "CMS_TABLE_DEFINED_ID", pkColumnValue = "CMS_TABLE_DEFINED_ID", valueColumnName = "ID_VALUE", pkColumnName = "ID_GENERATOR_NAME", table = "ID_SEQUENCE", allocationSize = 1)
+	@GeneratedValue(generator = "CMS_TABLE_DEFINED_ID", strategy = GenerationType.TABLE)
 	private Integer id;
+	
 	@Column(name = "NAME")
 	private String name;
+	
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
 	@Column(name = "SQL_TEXT", length = 1000000000)
 	private String sqlText;
+	
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "TABLE_ID")
 	private List<TableColumn> columns;
+	
 	@Column(name = "TABLE_TYPE")
 	@Enumerated(EnumType.STRING)
 	private TableType tableType;

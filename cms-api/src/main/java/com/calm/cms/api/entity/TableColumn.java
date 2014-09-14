@@ -16,35 +16,36 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	 */
 	@EmbeddedId
 	private TableColumnKey id;
-	
+
 	@Column(name = "DEFAULT_VALUE")
 	private String defaultValue;
-	
+
 	@Column(name = "RELATION")
 	private Relation relation;
-	
+
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "PROCESSOR")
 	private FieldType processor;
-	
+
 	@Column(name = "REQUIRED")
 	private Boolean required;
 
 	@Column(name = "ORDER_INDEX")
 	private Integer orderIndex;
-	
-	@Column(name = "RELATION_TABLE_ID")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "RELATION_TABLE_ID")
 	private TableDefined relationTableDefined;
-	
+
 	@Column(name = "RELATION_COLUMN")
 	private String relationColumn;
-	
+
 	public TableColumn() {
 	}
 
@@ -169,5 +170,5 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	public void setRelationTableDefined(TableDefined relationTableDefined) {
 		this.relationTableDefined = relationTableDefined;
 	}
-	
+
 }
