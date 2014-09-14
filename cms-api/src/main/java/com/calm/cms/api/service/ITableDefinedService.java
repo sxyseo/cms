@@ -8,11 +8,9 @@ import java.util.List;
 
 public interface ITableDefinedService extends IBaseService<Integer,TableDefined> {
 
-//	void updateSqlText(TableDefined table,TableColumn temp,boolean deleteFlag);
-
-	void updateSqlTextForAddColumn(TableDefined table,TableColumn temp);
+	void updateSqlTextForAddColumn(TableDefined table,TableColumn... temp);
 	
-	void updateSqlTextForDeleteColumn(TableDefined table,TableColumn temp);
+	void updateSqlTextForDeleteColumn(TableDefined table,TableColumn... temp);
 	
 	List<TableDefined> listAllDataTable();
 

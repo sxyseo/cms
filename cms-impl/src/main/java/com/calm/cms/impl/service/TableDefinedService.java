@@ -1,5 +1,6 @@
 package com.calm.cms.impl.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -89,24 +90,29 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		}
 	}
 	
-	private void updateSqlText(TableDefined table,TableColumn temp,boolean deleteFlag) {
+	private void updateSqlText(TableDefined table,boolean deleteFlag,TableColumn... temp) {
 		TableDefined loadById = loadById(table.getId());
 		List<TableColumn> columns = loadById.getColumns();
+		if(columns==null){
+			columns = new ArrayList<>();
+		}
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT CD.ID AS ID_,CD.TABLE_ID AS TABLE_ID_");
-		for (TableColumn tct : columns) {
-			if(deleteFlag && tct.equals(temp)){
-				continue;
+		for(TableColumn t:temp){
+			if(deleteFlag){
+				columns.remove(t);
+			}else{
+				if(columns.contains(t)){
+					continue;
+				}else{
+					columns.add(t);
+				}
 			}
-//			ColumnDefined cd = tct.getId().getColumnDefined();
+		}
+		for (TableColumn tct : columns) {
 			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = '" + tct.getId().getId()
 					+ "' THEN CD.VALUE_TEXT ELSE NULL END ) "
 					+ tct.getId().getId());
-		}
-		if(!deleteFlag){
-			sql.append(",MAX(CASE WHEN CD.COLUMN_ID = '" + temp.getId().getId()
-					+ "' THEN CD.VALUE_TEXT ELSE NULL END ) "
-					+ temp.getId().getId());
 		}
 		sql.append(" FROM COLUMN_DATA CD WHERE CD.TABLE_ID=" + table.getId()
 				+ " GROUP BY CD.ID,CD.TABLE_ID");
@@ -123,14 +129,14 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 	}
 
 	@Override
-	public void updateSqlTextForAddColumn(TableDefined table, TableColumn temp) {
-		updateSqlText(table, temp, false);
+	public void updateSqlTextForAddColumn(TableDefined table, TableColumn... temp) {
+		updateSqlText(table, false, temp);
 	}
 
 	@Override
 	public void updateSqlTextForDeleteColumn(TableDefined table,
-			TableColumn temp) {
-		updateSqlText(table, temp, true);
+			TableColumn... temp) {
+		updateSqlText(table, true, temp);
 	}
 
 }

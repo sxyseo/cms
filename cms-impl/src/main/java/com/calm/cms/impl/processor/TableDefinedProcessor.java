@@ -178,6 +178,10 @@ public class TableDefinedProcessor implements FieldProcessor<Map<String, Object>
 			return loadOne2many(rowId, tableColumn).get(0);
 		case MANY2MANY:
 			return loadMany2many(rowId, tableColumn).get(0);
+		case MANY2ONE:
+			break;
+		default:
+			break;
 		}
 		return null;
 	}
