@@ -1,7 +1,6 @@
 <extention xmlns="http://www.calm.com/extention" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:processor="http://www.calm.com/extention/cms/fieldProcessor">
 	<processor:simple id="stringProcessor" name="字符串" description=""/>
-	<processor:simple id="fileProcessor" name="文件" description=""/>
 	<processor:simple id="integerProcessor" name="整数" description=""/>
 	<processor:simple id="doubleProcessor" name="小数" description=""/>
 	<processor:simple id="dateProcessor" name="日期" description=""/>
