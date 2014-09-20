@@ -92,6 +92,8 @@ public class TableColumnService extends
 			break;
 		case ONE2MANY:
 			break;
+		case MANY2ONE:
+			break;
 		case MANY2MANY:
 			addMany2ManyRelation(newEntity);
 			break;
@@ -138,16 +140,15 @@ public class TableColumnService extends
 			//绑定关联表
 			newEntity.setRelationTableDefined(rel);
 			//创建关联列
-			TableColumn col1 = new TableColumn(rel, "RELATION" + tableId);
+			TableColumn col1 = new TableColumn(rel, newEntity.getId().getId());
 			col1.setRelation(Relation.MANY2ONE);
 			loadByProperty = fieldTypeService.loadByProperty("tableDefinedId",	tableId);
 			col1.setProcessor(loadByProperty);
 			baseDao.insert(col1);
 			//创建关联列
-			TableColumn col2 = new TableColumn(rel, "RELATION"	+ relationDefinedId);
+			TableColumn col2 = new TableColumn(rel, newEntity.getRelationColumn());
 			col2.setRelation(Relation.MANY2ONE);
-			loadByProperty = fieldTypeService.loadByProperty("tableDefinedId",
-					relationDefinedId);
+			loadByProperty = fieldTypeService.loadByProperty("tableDefinedId", relationDefinedId);
 			col2.setProcessor(loadByProperty);
 			baseDao.insert(col2);
 			//更新关联表中的数据查询sql

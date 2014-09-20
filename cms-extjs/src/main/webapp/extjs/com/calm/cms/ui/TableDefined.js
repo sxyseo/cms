@@ -682,8 +682,11 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 			//多对多不展示默认值，展示关系列
     		} else if(relation.getValue()=='MANY2MANY'){
     			defaultValueField.hide();
-    			relationColumn.hide();
-    			relationColumn.allowBlank=true;
+    			relationColumn.show();
+    			relationColumn.allowBlank=false;
+    			if(combo.valueModels.length){
+    				relationColumn.getStore().load({params:{tableId:combo.valueModels[0].get('tableDefinedId')}});
+    			}
 			//多对一不展示默认值，展示关系列
     		} else if(relation.getValue()=='MANY2ONE'){
     			defaultValueField.hide();
