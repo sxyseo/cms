@@ -1,5 +1,8 @@
-<extention xmlns="http://www.calm.com/extention" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:menu="http://www.calm.com/extention/framework/menu">
+<extention xmlns="http://www.calm.com/schema/extention/extention" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:menu="http://www.calm.com/schema/extention/framework/menu"
+	xsi:schemaLocation="http://www.calm.com/schema/extention/extention http://www.calm.com/schema/extention/extention.xsd
+	http://www.calm.com/schema/extention/framework/menu http://www.calm.com/schema/extention/framework/menu.xsd ">
 	<menu:default-menu id="030100" label="内容管理" priority="10" />
 	<menu:default-menu id="030101" label="模型信息"
 		href="/cms/tableDefined/" parentId="030100" priority="10" />

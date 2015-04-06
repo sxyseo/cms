@@ -6,7 +6,7 @@ import com.calm.framework.common.entity.LogisticDeletable;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "FIELD_TYPE")
+@Table(name = "CMS_FIELD_TYPE")
 public class FieldType implements BaseEntity<Integer>, LogisticDeletable {
 	/**
 	 * 

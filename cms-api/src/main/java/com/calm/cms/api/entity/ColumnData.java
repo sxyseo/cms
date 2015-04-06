@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "COLUMN_DATA")
+@Table(name = "CMS_COLUMN_DATA")
 public class ColumnData implements BaseEntity<ColumnDataKey> {
 	/**
 	 * 

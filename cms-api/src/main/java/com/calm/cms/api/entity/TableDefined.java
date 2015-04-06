@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "TABLE_DEFINED")
+@Table(name = "CMS_TABLE_DEFINED")
 public class TableDefined implements BaseEntity<Integer> {
 	/**
 	 * 

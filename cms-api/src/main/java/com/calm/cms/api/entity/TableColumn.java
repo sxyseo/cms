@@ -5,7 +5,7 @@ import com.calm.framework.common.entity.BaseEntity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "TABLE_COLUMN")
+@Table(name = "CMS_TABLE_COLUMN")
 public class TableColumn implements BaseEntity<TableColumnKey> {
 	/**
 	 * 

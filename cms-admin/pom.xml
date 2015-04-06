@@ -37,6 +37,12 @@
 			<groupId>com.calm</groupId>
 			<artifactId>web</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>javax.servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
