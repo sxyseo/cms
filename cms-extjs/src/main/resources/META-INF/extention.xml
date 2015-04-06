@@ -8,4 +8,8 @@
 		<webdesk:quickStart name="模型定义" iconCls="cms-table-defined-quickstart"/>
 		<webdesk:shortCut name="模型定义" iconCls="cms-table-defined-shortcut"/>
 	</webdesk:module>
+	<webdesk:module id="cms-data-manager" name="数据管理" className="com.calm.cms.ui.DataManager" groupId="com.calm.cms" >
+		<webdesk:quickStart name="数据管理" iconCls="cms-data-manager-quickstart"/>
+		<webdesk:shortCut name="数据管理" iconCls="cms-data-manager-shortcut"/>
+	</webdesk:module>
 </extention>

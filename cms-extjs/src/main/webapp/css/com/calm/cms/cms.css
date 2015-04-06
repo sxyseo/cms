@@ -2,3 +2,9 @@
 .cms-table-defined-shortcut{background: url(images/cms_48x48.png)}
 .cms-table-defined-icon,.cms-table-defined-quickstart{background: url(images/cms_16x16.png)}
 .cms-table-defined-action-table-column{background: url(images/table_column_16x16.png)}
+
+.cms-data-manager-shortcut{background: url(images/data_manager_48x48.png)}
+.cms-data-manager-icon,.cms-data-manager-quickstart{background: url(images/data_manager_16x16.png)}
+.cms-data-manager-action-table-column{background: url(images/data_manager_16x16.png)}
+
+.cms-table{background:url(images/table_48x48.png)}
