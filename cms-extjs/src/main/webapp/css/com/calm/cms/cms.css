@@ -3,8 +3,25 @@
 .cms-table-defined-icon,.cms-table-defined-quickstart{background: url(images/cms_16x16.png)}
 .cms-table-defined-action-table-column{background: url(images/table_column_16x16.png)}
 
+
 .cms-data-manager-shortcut{background: url(images/data_manager_48x48.png)}
 .cms-data-manager-icon,.cms-data-manager-quickstart{background: url(images/data_manager_16x16.png)}
 .cms-data-manager-action-table-column{background: url(images/data_manager_16x16.png)}
 
-.cms-table{background:url(images/table_48x48.png)}
+.cms-table{
+  background:url(images/table_48x48.png);
+}
+.cms-ux-table-text{}
+.cms-ux-table-icon{background:url(images/table_48x48.png);
+  width: 48px;
+  height: 48px;
+  background-color: transparent;
+  background-repeat: no-repeat;}
+.cms-ux-table{
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  padding: 8px;
+  margin: 8px;
+  width: 64px;
+}

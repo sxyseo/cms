@@ -104,7 +104,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
     	                			var rec = grid.getStore().getAt(rowIndex);
     	                			com.calm.platform.Utils.requestAjax('cms/tableDefined/delete',{id: rec.get('id')},function(){
     	                				userStore.reload();
-    	                				grid.getView().refresh();
+//    	                				grid.getView().refresh();
     	                			});
     	                		}
     	                	});
