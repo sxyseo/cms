@@ -12,8 +12,9 @@ import com.calm.cms.impl.processor.TableDefinedProcessor;
  * @author dingqihui
  *
  */
-public class ProcessorUtils {
-	private ProcessorUtils(){}
+public abstract class ProcessorUtils {
+	private ProcessorUtils(){
+	}
 	
 	/**
 	 * 根据名称获得属性处理器
@@ -21,7 +22,7 @@ public class ProcessorUtils {
 	 * @param context spring上下文
 	 * @return 处理器
 	 */
-	public static FieldProcessor<?> getFieldProcessor(String name,
+	public static FieldProcessor<? extends Object> getFieldProcessor(String name,
 			ApplicationContext context) {
 		int indexOf = name.indexOf("?");
 		String beanName;

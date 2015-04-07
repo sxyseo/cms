@@ -46,7 +46,7 @@ public class TableDefinedAction extends
 	}
 
 	@RequestMapping(value = "/edit/", method = RequestMethod.POST)
-	public String add(TableDefined entity, ArrayList<ColumnDefined> columns,
+	public String add(TableDefined entity, List<ColumnDefined> columns,
 			Model model) {
 		if (StringUtils.isEmpty(entity.getName())) {
 			addFieldError("name", "GLOBAL_E_00001");

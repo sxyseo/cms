@@ -82,11 +82,9 @@ public class EntityMapResultTransformer extends
 		ProcessorType type = processor.getType();
 		String processId = processor.getProcessId();
 		FieldProcessor<?> bean = context.getBean(processId,FieldProcessor.class);
-		if (type == ProcessorType.TABLE) {
-			if (bean instanceof TableDefinedProcessor) {
-				((TableDefinedProcessor) bean).setTableId(processor
-						.getTableDefinedId());
-			}
+		if (type == ProcessorType.TABLE && bean instanceof TableDefinedProcessor) {
+			((TableDefinedProcessor) bean).setTableId(processor
+					.getTableDefinedId());
 		}
 		Object realValue = bean.get(id, value, tableColumn);
 		result.put(key, realValue);

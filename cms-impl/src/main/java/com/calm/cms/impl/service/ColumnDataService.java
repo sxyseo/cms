@@ -32,7 +32,7 @@ public class ColumnDataService extends BaseService<ColumnDataKey,ColumnData> imp
 	public List<Map<String,Object>> listAll(Integer tableId) {
 		TableDefined loadById = tableDefinedService.loadById(tableId);
 		if (loadById == null) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		SQLQuery createSQLQuery = columnDataDao.createSQLQuery(loadById.getSqlText());
 		createSQLQuery.setResultTransformer(entityMapResultTransformer);
