@@ -9,5 +9,6 @@ Ext.define('com.calm.cms.module.TableColumn', {
              {name:'processorId'}, 
              {name:'processorName'},
              {name:'processorType'},
-             {name:'required'}]
+             {name:'required'},
+             {name:'primaryKey'}]
 });

@@ -5,6 +5,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.calm.framework.annotation.Json;
+
 import java.io.Serializable;
 
 @Embeddable
@@ -30,7 +32,7 @@ public class TableColumnKey implements Serializable {
 		this.tableDefined = tableDefined;
 		this.id = id;
 	}
-	
+	@Json(serialize=false)
 	public TableDefined getTableDefined() {
 		return tableDefined;
 	}

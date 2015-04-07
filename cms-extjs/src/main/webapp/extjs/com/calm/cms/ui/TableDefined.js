@@ -338,6 +338,10 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					dataIndex: 'required',
 					width:50
 				},{
+					text: '主键',
+					dataIndex: 'primaryKey',
+					width:50
+				},{
 					xtype:'actioncolumn',
 					width:70,
 					items: [{
@@ -422,7 +426,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 			win = desktop.createWindow({
 				id: 'cms-table-defined-table-column-win',
 				title: '模型项目',
-				width:830,
+				width:880,
 				height:500,
 				modal:true,
 				tableId:null,
@@ -603,6 +607,10 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 				},{
 					name: 'required',
 				    fieldLabel:'必须填写',
+				    xtype:'checkbox'
+				},{
+					name: 'primaryKey',
+				    fieldLabel:'主键',
 				    xtype:'checkbox'
 				}],
 				buttons: [{

@@ -11,9 +11,7 @@ Ext.define('com.calm.cms.ui.DataManager', {
     requires: [
         'Ext.tree.Panel',
         'Ext.form.field.Text',
-        'com.calm.cms.module.TableDefined',
-        'com.calm.cms.module.TableColumn',
-        'com.calm.platform.Utils'
+        'com.calm.cms.module.TableDefined'
     ],
 
     id: 'cms-data-manager',
@@ -108,6 +106,8 @@ Ext.define('com.calm.cms.ui.DataManager', {
         return win;
     },
     onTableItemClick: function (dataView, record) {
-    	
+    	var me = this, module = Ext.create('com.calm.cms.ui.DataTableWindow');
+    	module.tableId=record.data.id;
+    	module.show();
     },
 });

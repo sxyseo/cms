@@ -30,6 +30,7 @@ public class TableDefined implements BaseEntity<Integer> {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = { })
 	@JoinColumn(name = "TABLE_ID")
+	@OrderBy("orderIndex")
 	private List<TableColumn> columns;
 
 	@Column(name = "TABLE_TYPE")

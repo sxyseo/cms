@@ -1,5 +1,6 @@
 package com.calm.cms.api.entity;
 
+import com.calm.framework.annotation.Json;
 import com.calm.framework.common.entity.BaseEntity;
 
 import javax.persistence.*;
@@ -46,7 +47,9 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 
 	@Column(name = "RELATION_COLUMN")
 	private String relationColumn;
-
+	
+	@Column(name = "PRIMARY_KEY")
+	private Boolean primaryKey;
 	public TableColumn() {
 	}
 
@@ -56,7 +59,7 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 
 	@Override
 	public String getDisplayName() {
-		return "模型项目";
+		return "模型属性";
 	}
 
 	@Override
@@ -163,7 +166,7 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	public void setRelationColumn(String relationColumn) {
 		this.relationColumn = relationColumn;
 	}
-
+	@Json(serialize=false)
 	public TableDefined getRelationTableDefined() {
 		return relationTableDefined;
 	}
@@ -172,4 +175,11 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 		this.relationTableDefined = relationTableDefined;
 	}
 
+	public Boolean getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(Boolean primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 }

@@ -94,12 +94,20 @@ public class TableDefinedAction extends
 			}
 			
 			tco.setRequired(tc.getRequired());
+			tco.setPrimaryKey(tc.getPrimaryKey());
 			list.add(tco);
 		}
 		result.put(LIST, list);
 		return result;
 	}
 	
+	public 
+	@RequestMapping(value="load",method={RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	@Override
+	Object load(Integer id) {
+		return super.load(id);
+	}
 	@Resource
 	@Override
 	public void setService(ITableDefinedService service) {
