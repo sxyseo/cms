@@ -19,26 +19,45 @@ import com.calm.framework.common.dao.Query;
 import com.calm.framework.common.exception.EntityAlreadyExistException;
 import com.calm.framework.common.exception.FrameworkExceptioin;
 import com.calm.framework.common.service.impl.BaseService;
-
+/**
+ * 模型定义服务
+ * @author dingqihui
+ *
+ */
 @Service
 public class TableDefinedService extends BaseService<Integer,TableDefined> implements
 		ITableDefinedService {
+	/**
+	 * 类型服务
+	 */
 	@Resource
 	private IFieldTypeService fieldTypeService;
 	
+	/**
+	 * 模型列服务
+	 */
 	@Resource
 	private ITableColumnService tableColumnService;
 	
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#queryPaging(com.calm.framework.common.dao.Query, com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void queryPaging(Query<Integer,TableDefined> query, TableDefined ui) {
 		query.eq("tableType", TableType.DATA);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.IBaseService#getEntityClass()
+	 */
 	@Override
 	public Class<TableDefined> getEntityClass() {
 		return TableDefined.class;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#add(com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	public void add(TableDefined newEntity) {
 		super.add(newEntity);
@@ -53,6 +72,9 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 			fieldTypeService.add(ft);
 		}
 	}
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#preAdd(com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void preAdd(TableDefined newEntity) {
 		//判断名称重复
@@ -63,6 +85,9 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 			throw new EntityAlreadyExistException(newEntity);
 		}
 	}
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#preDelete(com.calm.framework.common.entity.BaseEntity, com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void preDelete(TableDefined dbEentity, TableDefined newEntity) {
 		//判断表中定义有数据项目
@@ -80,6 +105,9 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 			fieldTypeService.delete(load);
 		}
 	}
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#preUpdate(com.calm.framework.common.entity.BaseEntity, com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void preUpdate(TableDefined dbEentity, TableDefined newEntity) {
 		dbEentity.setDescription(newEntity.getDescription());
@@ -95,6 +123,12 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		}
 	}
 	
+	/**
+	 * 更新表的的数据SQL
+	 * @param table 影响的表
+	 * @param deleteFlag 是否删除
+	 * @param temp 影响的列
+	 */
 	private void updateSqlText(TableDefined table,boolean deleteFlag,TableColumn... temp) {
 		TableDefined loadById = loadById(table.getId());
 		List<TableColumn> columns = loadById.getColumns();
@@ -131,6 +165,9 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.cms.api.service.ITableDefinedService#listAllDataTable()
+	 */
 	@Override
 	public List<TableDefined> listAllDataTable() {
 		Query<Integer, TableDefined> query = createQuery();
@@ -138,11 +175,17 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		return query.list();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.cms.api.service.ITableDefinedService#updateSqlTextForAddColumn(com.calm.cms.api.entity.TableDefined, com.calm.cms.api.entity.TableColumn[])
+	 */
 	@Override
 	public void updateSqlTextForAddColumn(TableDefined table, TableColumn... temp) {
 		updateSqlText(table, false, temp);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.cms.api.service.ITableDefinedService#updateSqlTextForDeleteColumn(com.calm.cms.api.entity.TableDefined, com.calm.cms.api.entity.TableColumn[])
+	 */
 	@Override
 	public void updateSqlTextForDeleteColumn(TableDefined table,
 			TableColumn... temp) {

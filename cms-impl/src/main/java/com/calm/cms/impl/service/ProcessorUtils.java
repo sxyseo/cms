@@ -7,9 +7,20 @@ import org.springframework.context.ApplicationContext;
 
 import com.calm.cms.api.processor.FieldProcessor;
 import com.calm.cms.impl.processor.TableDefinedProcessor;
-
+/**
+ * 处理器工具类
+ * @author dingqihui
+ *
+ */
 public class ProcessorUtils {
 	private ProcessorUtils(){}
+	
+	/**
+	 * 根据名称获得属性处理器
+	 * @param name 处理器名称
+	 * @param context spring上下文
+	 * @return 处理器
+	 */
 	public static FieldProcessor<?> getFieldProcessor(String name,
 			ApplicationContext context) {
 		int indexOf = name.indexOf("?");
@@ -32,6 +43,11 @@ public class ProcessorUtils {
 		return bean;
 	}
 
+	/**
+	 * 解析名称上的参数
+	 * @param parameterStr 包含参数的字符串
+	 * @return 参数的名值对
+	 */
 	private static Map<String, String> getProcessorParameter(String parameterStr) {
 		String[] split = parameterStr.split("&");
 		Map<String, String> result = new HashMap<>(split.length);

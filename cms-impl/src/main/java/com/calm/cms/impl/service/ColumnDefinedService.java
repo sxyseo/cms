@@ -11,6 +11,11 @@ import com.calm.framework.common.exception.EntityAlreadyExistException;
 import com.calm.framework.common.service.impl.BaseService;
 import com.calm.framework.util.BeanUtils;
 
+/**
+ * 列定义服务 已经过时 请参考
+ * @author dingqihui
+ *
+ */
 @Service
 @Deprecated
 public class ColumnDefinedService extends BaseService<Integer,ColumnDefined> implements

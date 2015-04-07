@@ -18,6 +18,11 @@ import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.common.dao.Query;
 import com.calm.framework.common.service.impl.BaseService;
 
+/**
+ * 模型列处理器
+ * @author dingqihui
+ *
+ */
 @Service
 public class TableColumnService extends
 		BaseService<TableColumnKey, TableColumn> implements ITableColumnService {
@@ -26,17 +31,26 @@ public class TableColumnService extends
 	@Resource
 	private IFieldTypeService fieldTypeService;
 
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#queryPaging(com.calm.framework.common.dao.Query, com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void queryPaging(Query<TableColumnKey, TableColumn> query,
 			TableColumn ui) {
 		query.asc("orderIndex");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.IBaseService#getEntityClass()
+	 */
 	@Override
 	public Class<TableColumn> getEntityClass() {
 		return TableColumn.class;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#preUpdate(com.calm.framework.common.entity.BaseEntity, com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void preUpdate(TableColumn dbEentity, TableColumn newEntity) {
 		com.calm.framework.util.BeanUtils.copyProperties(newEntity, dbEentity,
@@ -52,6 +66,9 @@ public class TableColumnService extends
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#add(com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	public void add(TableColumn t) {
 		super.add(t);
@@ -60,6 +77,9 @@ public class TableColumnService extends
 				.getTableDefined(), t);
 
 	}
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#preAdd(com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void preAdd(TableColumn newEntity) {
 		
@@ -196,6 +216,9 @@ public class TableColumnService extends
 		dbEentity.setRelationTableDefined(null);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#delete(com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	public void delete(TableColumn t) {
 		super.delete(t);
@@ -204,6 +227,9 @@ public class TableColumnService extends
 				.getTableDefined(), t);
 		
 	}
+	/* (non-Javadoc)
+	 * @see com.calm.framework.common.service.impl.BaseService#preDelete(com.calm.framework.common.entity.BaseEntity, com.calm.framework.common.entity.BaseEntity)
+	 */
 	@Override
 	protected void preDelete(TableColumn dbEentity, TableColumn newEntity) {
 		//删除多对多关系
@@ -213,6 +239,9 @@ public class TableColumnService extends
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.calm.cms.api.service.ITableColumnService#order(java.lang.String, java.lang.Integer, boolean)
+	 */
 	/* (non-Javadoc)
 	 * @see com.calm.cms.api.service.ITableColumnService#order(java.lang.String, java.lang.Integer, boolean)
 	 */
