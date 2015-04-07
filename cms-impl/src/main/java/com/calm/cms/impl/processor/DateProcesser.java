@@ -3,19 +3,31 @@ package com.calm.cms.impl.processor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.processor.FieldProcessor;
 
+/**
+ * 日期类型处理器
+ * @author dingqihui
+ *
+ */
 public class DateProcesser implements FieldProcessor<Date> {
+	/**
+	 * 日志
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(DateProcesser.class);
+	/**
+	 * 日期格式
+	 */
 	private String pattern;
+	/**
+	 * 日期格式处理器
+	 */
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat();
-
-	@Override
-	public List<Date> getList(Integer id, TableColumn tableColumn) {
-		return null;
-	}
 
 	@Override
 	public Date get(Integer rowId, Object value, TableColumn tableColumn) {
@@ -27,7 +39,7 @@ public class DateProcesser implements FieldProcessor<Date> {
 		try {
 			return FORMAT.parse(string);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 

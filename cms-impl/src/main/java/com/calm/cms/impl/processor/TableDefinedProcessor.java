@@ -14,12 +14,12 @@ import com.calm.cms.api.dao.QueryMapper;
 import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
-import com.calm.cms.api.processor.FieldProcessor;
+import com.calm.cms.api.processor.ListableFieldProcessor;
 import com.calm.cms.api.service.IColumnDataService;
 import com.calm.cms.api.service.ITableDefinedService;
 
 @Service
-public class TableDefinedProcessor implements FieldProcessor<Map<String, Object>> {
+public class TableDefinedProcessor implements ListableFieldProcessor<Map<String, Object>> {
 	private Integer tableId;
 	@Resource
 	private IColumnDataService columnDataService;
@@ -94,7 +94,7 @@ public class TableDefinedProcessor implements FieldProcessor<Map<String, Object>
 				}
 
 			});
-			if (list.size() > 0) {
+			if (!list.isEmpty()) {
 				List<TableColumn> columns = relTable.getColumns();
 				List<String> columnStr = new ArrayList<>();
 				for (TableColumn tc : columns) {
@@ -243,7 +243,7 @@ public class TableDefinedProcessor implements FieldProcessor<Map<String, Object>
 			}
 
 		});
-		if (list.size() > 0) {
+		if (!list.isEmpty()) {
 			List<TableColumn> columns = relTable.getColumns();
 			List<String> columnStr = new ArrayList<>();
 			for (TableColumn tc : columns) {

@@ -37,8 +37,6 @@ public class EntityMapResultTransformer extends
 
 	@Resource
 	private ITableColumnService tcService;
-//	@Resource
-//	private IColumnDefinedService cdService;
 	@Resource
 	private ITableDefinedService tdService;
 	@Resource
@@ -51,9 +49,10 @@ public class EntityMapResultTransformer extends
 		Map<String, Object> result = new HashMap<>(tuple.length);
 		for (int i = 0; i < tuple.length; i++) {
 			String alias = aliases[i];
-			if (alias != null) {
-				result.put(alias, tuple[i]);
+			if (alias == null) {
+				continue;
 			}
+			result.put(alias, tuple[i]);
 		}
 
 		Integer id = (Integer) result.get(ID);
@@ -66,34 +65,33 @@ public class EntityMapResultTransformer extends
 			TableDefined table = tdService.loadById(tableId);
 			for (Map.Entry<String, Object> e : result.entrySet()) {
 				String key = e.getKey();
-				if (key.equals(ID)) {
+				if (key.equals(ID)||key.equals(TABLE_ID)) {
 					continue;
 				}
-				if (key.equals(TABLE_ID)) {
-					continue;
-				}
-				TableColumn tableColumn = tcService.loadById(new TableColumnKey(table, key));
-				FieldType processor = tableColumn.getProcessor();
-				ProcessorType type = processor.getType();
-				String processId = processor.getProcessId();
-				FieldProcessor<?> bean = context.getBean(processId,
-						FieldProcessor.class);
-				if (type == ProcessorType.TABLE) {
-					if (bean instanceof TableDefinedProcessor) {
-						((TableDefinedProcessor) bean).setTableId(processor
-								.getTableDefinedId());
-					}
-				}
-				Object realValue = bean.get(id, e.getValue(), tableColumn);
-				result.put(key, realValue);
+				processField(table,key,id,e.getValue(),result);
 			}
 			return result;
 		} else {
 			return map2;
 		}
-
 	}
-
+	
+	private void processField(TableDefined table,String key,Integer id,Object value ,Map<String, Object> result){
+		TableColumn tableColumn = tcService.loadById(new TableColumnKey(table, key));
+		FieldType processor = tableColumn.getProcessor();
+		ProcessorType type = processor.getType();
+		String processId = processor.getProcessId();
+		FieldProcessor<?> bean = context.getBean(processId,FieldProcessor.class);
+		if (type == ProcessorType.TABLE) {
+			if (bean instanceof TableDefinedProcessor) {
+				((TableDefinedProcessor) bean).setTableId(processor
+						.getTableDefinedId());
+			}
+		}
+		Object realValue = bean.get(id, value, tableColumn);
+		result.put(key, realValue);
+	}
+	
 	@Override
 	public boolean isTransformedValueATupleElement(String[] aliases,
 			int tupleLength) {

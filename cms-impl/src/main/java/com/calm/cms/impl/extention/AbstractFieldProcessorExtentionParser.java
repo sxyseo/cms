@@ -11,7 +11,7 @@ import com.calm.cms.api.service.IFieldTypeService;
 import com.calm.framework.extention.ExtentionParser;
 public abstract class AbstractFieldProcessorExtentionParser implements
 		ExtentionParser, InitializingBean {
-	public static boolean resetField = false;
+	public static boolean resetField ;
 
 	@Resource
 	protected IFieldTypeService fieldTypeService;

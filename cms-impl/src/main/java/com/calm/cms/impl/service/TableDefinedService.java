@@ -93,7 +93,7 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		//判断表中定义有数据项目
 		List<TableColumn> listByProperty = tableColumnService.listByProperty("id.tableDefined", dbEentity);
 		
-		if (listByProperty.size() > 0) {
+		if (!listByProperty.isEmpty()) {
 			throw new FrameworkExceptioin("CMS_E_00002");
 		}
 		//删除类型处理
