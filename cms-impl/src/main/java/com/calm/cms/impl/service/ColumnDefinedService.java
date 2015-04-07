@@ -29,7 +29,7 @@ public class ColumnDefinedService extends BaseService<Integer,ColumnDefined> imp
 		Query<Integer,ColumnDefined> query = createQuery();
 		query.eq("name", newEntity.getName());
 		List<ColumnDefined> list = query.list();
-		if (list.size() > 0) {
+		if (!list.isEmpty()) {
 			throw new EntityAlreadyExistException(newEntity);
 		}
 	}

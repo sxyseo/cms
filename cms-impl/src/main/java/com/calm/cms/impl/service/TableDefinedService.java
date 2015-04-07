@@ -59,7 +59,7 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 		Query<Integer,TableDefined> query = createQuery();
 		query.eq("name", newEntity.getName());
 		List<TableDefined> list = query.list();
-		if (list.size() > 0) {
+		if (!list.isEmpty()) {
 			throw new EntityAlreadyExistException(newEntity);
 		}
 	}

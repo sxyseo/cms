@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.hibernate.SQLQuery;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.calm.cms.api.dao.QueryMapper;
@@ -26,8 +25,8 @@ public class TableDefinedProcessor implements FieldProcessor<Map<String, Object>
 	private IColumnDataService columnDataService;
 	@Resource
 	private ITableDefinedService tdService;
-	@Resource
-	private ApplicationContext context;
+//	@Resource
+//	private ApplicationContext context;
 
 	public Integer getTableId() {
 		return tableId;
@@ -162,10 +161,10 @@ public class TableDefinedProcessor implements FieldProcessor<Map<String, Object>
 					}
 
 				});
-		if (list.size() > 0) {
-			return list.get(0);
+		if (list.isEmpty()) {
+			return null;
 		}
-		return null;
+		return list.get(0);
 	}
 
 	@Override

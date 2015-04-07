@@ -9,6 +9,7 @@ import com.calm.cms.api.processor.FieldProcessor;
 import com.calm.cms.impl.processor.TableDefinedProcessor;
 
 public class ProcessorUtils {
+	private ProcessorUtils(){}
 	public static FieldProcessor<?> getFieldProcessor(String name,
 			ApplicationContext context) {
 		int indexOf = name.indexOf("?");

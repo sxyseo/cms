@@ -22,6 +22,8 @@ import com.calm.cms.impl.processor.TableDefinedProcessor;
 @Component
 public class EntityMapResultTransformer extends
 		AliasedTupleSubsetResultTransformer {
+	public static final String TABLE_ID ="TABLE_ID";
+	public static final String ID ="ID";
 	private ThreadLocal<Map<String, Map<String, Object>>> cache = new ThreadLocal<Map<String, Map<String, Object>>>() {
 		@Override
 		protected Map<String, Map<String, Object>> initialValue() {
@@ -54,8 +56,8 @@ public class EntityMapResultTransformer extends
 			}
 		}
 
-		Integer id = (Integer) result.get("ID");
-		Integer tableId = (Integer) result.get("TABLE_ID");
+		Integer id = (Integer) result.get(ID);
+		Integer tableId = (Integer) result.get(TABLE_ID);
 		Map<String, Map<String, Object>> map = cache.get();
 		String cacheKey = tableId + ":" + id;
 		Map<String, Object> map2 = map.get(cacheKey);
@@ -64,14 +66,12 @@ public class EntityMapResultTransformer extends
 			TableDefined table = tdService.loadById(tableId);
 			for (Map.Entry<String, Object> e : result.entrySet()) {
 				String key = e.getKey();
-				if (key.equals("ID")) {
+				if (key.equals(ID)) {
 					continue;
 				}
-				if (key.equals("TABLE_ID")) {
+				if (key.equals(TABLE_ID)) {
 					continue;
 				}
-//				ColumnDefined column = cdService.loadByProperty("columnName",
-//						key);
 				TableColumn tableColumn = tcService.loadById(new TableColumnKey(table, key));
 				FieldType processor = tableColumn.getProcessor();
 				ProcessorType type = processor.getType();
