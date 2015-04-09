@@ -1,11 +1,23 @@
 package com.calm.cms.api.entity;
 
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.calm.framework.annotation.Json;
 import com.calm.framework.common.entity.BaseEntity;
 
-import javax.persistence.*;
-
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "CMS_TABLE_COLUMN")
 public class TableColumn implements BaseEntity<TableColumnKey> {
 	/**

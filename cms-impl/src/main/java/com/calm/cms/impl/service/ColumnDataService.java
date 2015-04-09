@@ -2,7 +2,6 @@ package com.calm.cms.impl.service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.calm.cms.api.dao.IColumnDataDao;
 import com.calm.cms.api.dao.QueryMapper;
+import com.calm.cms.api.entity.BaseColumnData;
 import com.calm.cms.api.entity.ColumnData;
 import com.calm.cms.api.entity.ColumnDataKey;
 import com.calm.cms.api.entity.TableDefined;
@@ -29,7 +29,7 @@ public class ColumnDataService extends BaseService<ColumnDataKey,ColumnData> imp
 	private EntityMapResultTransformer entityMapResultTransformer;
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String,Object>> listAll(Integer tableId) {
+	public List<BaseColumnData> listAll(Integer tableId) {
 		TableDefined loadById = tableDefinedService.loadById(tableId);
 		if (loadById == null) {
 			return Collections.emptyList();
@@ -46,7 +46,7 @@ public class ColumnDataService extends BaseService<ColumnDataKey,ColumnData> imp
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String,Object>> list(Integer tableId, QueryMapper mapper) {
+	public List<BaseColumnData> list(Integer tableId, QueryMapper mapper) {
 		SQLQuery createSQLQuery = columnDataDao.createSQLQuery(mapper.getSql());
 		mapper.setParameter(createSQLQuery);
 		createSQLQuery.setResultTransformer(entityMapResultTransformer);

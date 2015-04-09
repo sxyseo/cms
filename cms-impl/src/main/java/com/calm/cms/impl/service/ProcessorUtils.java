@@ -22,7 +22,7 @@ public abstract class ProcessorUtils {
 	 * @param context spring上下文
 	 * @return 处理器
 	 */
-	public static FieldProcessor<? extends Object> getFieldProcessor(String name,
+	public static FieldProcessor getFieldProcessor(String name,
 			ApplicationContext context) {
 		int indexOf = name.indexOf("?");
 		String beanName;
@@ -31,7 +31,7 @@ public abstract class ProcessorUtils {
 		} else {
 			beanName = name;
 		}
-		FieldProcessor<?> bean = context.getBean(beanName, FieldProcessor.class);
+		FieldProcessor bean = context.getBean(beanName, FieldProcessor.class);
 		if(indexOf>0){
 			Map<String, String> param = getProcessorParameter(name
 					.substring(indexOf + 1));

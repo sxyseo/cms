@@ -1,5 +1,6 @@
 package com.calm.cms.api.entity;
 
+import com.calm.cms.Constant;
 import com.calm.framework.common.entity.BaseEntity;
 
 import javax.persistence.Column;
@@ -8,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "CMS_COLUMN_DATA")
+@Table(name = Constant.DATA_TABLE_NAME)
 public class ColumnData implements BaseEntity<ColumnDataKey> {
 	/**
 	 * 

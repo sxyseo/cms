@@ -6,7 +6,7 @@ import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.processor.FieldProcessor;
 
 @Service
-public class BooleanProcessor implements FieldProcessor<Boolean> {
+public class BooleanProcessor implements FieldProcessor {
 
 	@Override
 	public Boolean get(Integer rowId, Object value, TableColumn tableColumn) {

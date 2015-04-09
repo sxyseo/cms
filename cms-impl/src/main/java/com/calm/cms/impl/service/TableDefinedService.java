@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.calm.cms.Constant;
 import com.calm.cms.api.entity.FieldType;
 import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.entity.TableColumn;
@@ -136,7 +137,7 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 			columns = new ArrayList<>();
 		}
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT CD.ID AS ID_,CD.TABLE_ID AS TABLE_ID_");
+		sql.append("SELECT CD.ID AS "+Constant.ID+",CD.TABLE_ID AS "+Constant.TABLE_ID);
 		for(TableColumn t:temp){
 			if(!deleteFlag){
 				if(columns.contains(t)){
@@ -158,7 +159,7 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 					+ "' THEN CD.VALUE_TEXT ELSE NULL END ) "
 					+ tct.getId().getId());
 		}
-		sql.append(" FROM COLUMN_DATA CD WHERE CD.TABLE_ID=" + table.getId()
+		sql.append(" FROM "+Constant.DATA_TABLE_NAME+" CD WHERE CD.TABLE_ID=" + table.getId()
 				+ " GROUP BY CD.ID,CD.TABLE_ID");
 		loadById.setSqlText(sql.toString());
 		baseDao.update(loadById);

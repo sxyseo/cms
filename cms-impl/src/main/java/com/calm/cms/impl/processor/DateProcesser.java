@@ -15,7 +15,7 @@ import com.calm.cms.api.processor.FieldProcessor;
  * @author dingqihui
  *
  */
-public class DateProcesser implements FieldProcessor<Date> {
+public class DateProcesser implements FieldProcessor{
 	/**
 	 * 日志
 	 */
@@ -29,7 +29,6 @@ public class DateProcesser implements FieldProcessor<Date> {
 	 */
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat();
 
-	@Override
 	public Date get(Integer rowId, Object value, TableColumn tableColumn) {
 		if (value == null) {
 			return null;

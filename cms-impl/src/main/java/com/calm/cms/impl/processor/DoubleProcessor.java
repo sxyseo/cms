@@ -6,7 +6,7 @@ import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.processor.FieldProcessor;
 
 @Service
-public class DoubleProcessor implements FieldProcessor<Double> {
+public class DoubleProcessor implements FieldProcessor{
 
 	@Override
 	public Double get(Integer rowId, Object value, TableColumn tableColumn) {

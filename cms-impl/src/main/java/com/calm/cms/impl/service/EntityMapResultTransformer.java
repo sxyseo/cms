@@ -1,5 +1,7 @@
 package com.calm.cms.impl.service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +11,9 @@ import org.hibernate.transform.AliasedTupleSubsetResultTransformer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.calm.cms.Constant;
+import com.calm.cms.api.compile.Compiler;
+import com.calm.cms.api.entity.BaseColumnData;
 import com.calm.cms.api.entity.FieldType;
 import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.entity.TableColumn;
@@ -18,15 +23,16 @@ import com.calm.cms.api.processor.FieldProcessor;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.cms.impl.processor.TableDefinedProcessor;
+import com.calm.framework.common.exception.FrameworkExceptioin;
+import com.calm.framework.util.StringUtil;
 
 @Component
 public class EntityMapResultTransformer extends
 		AliasedTupleSubsetResultTransformer {
-	public static final String TABLE_ID ="TABLE_ID";
-	public static final String ID ="ID";
-	private ThreadLocal<Map<String, Map<String, Object>>> cache = new ThreadLocal<Map<String, Map<String, Object>>>() {
+	
+	private ThreadLocal<Map<String, BaseColumnData>> cache = new ThreadLocal<Map<String, BaseColumnData>>() {
 		@Override
-		protected Map<String, Map<String, Object>> initialValue() {
+		protected Map<String, BaseColumnData> initialValue() {
 			return new HashMap<>();
 		}
 	};
@@ -55,39 +61,56 @@ public class EntityMapResultTransformer extends
 			result.put(alias, tuple[i]);
 		}
 
-		Integer id = (Integer) result.get(ID);
-		Integer tableId = (Integer) result.get(TABLE_ID);
-		Map<String, Map<String, Object>> map = cache.get();
+		Integer id = (Integer) result.get(Constant.ID);
+		Integer tableId = (Integer) result.get(Constant.TABLE_ID);
+		
+		Map<String, BaseColumnData> map = cache.get();
 		String cacheKey = tableId + ":" + id;
-		Map<String, Object> map2 = map.get(cacheKey);
+		BaseColumnData map2 = map.get(cacheKey);
 		if (map2 == null) {
-			map.put(cacheKey, result);
 			TableDefined table = tdService.loadById(tableId);
+			BaseColumnData columnData = null;
+			try {
+				Class<? extends BaseColumnData> clazz = Compiler.getClass(table,EntityMapResultTransformer.class.getClassLoader());
+				columnData = clazz.newInstance();
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e1) {
+				throw new FrameworkExceptioin(e1.getMessage());
+			}
+			columnData.setId_(id);
+			columnData.setTableId_(tableId);
+			map.put(cacheKey, columnData);
 			for (Map.Entry<String, Object> e : result.entrySet()) {
 				String key = e.getKey();
-				if (key.equals(ID)||key.equals(TABLE_ID)) {
+				if (key.equals(Constant.ID)||key.equals(Constant.TABLE_ID)) {
 					continue;
 				}
-				processField(table,key,id,e.getValue(),result);
+				processField(table,key,id,e.getValue(),columnData);
 			}
-			return result;
+			return columnData;
 		} else {
 			return map2;
 		}
 	}
 	
-	private void processField(TableDefined table,String key,Integer id,Object value ,Map<String, Object> result){
+	private void processField(TableDefined table,String key,Integer id,Object value , BaseColumnData columnData){
 		TableColumn tableColumn = tcService.loadById(new TableColumnKey(table, key));
 		FieldType processor = tableColumn.getProcessor();
 		ProcessorType type = processor.getType();
 		String processId = processor.getProcessId();
-		FieldProcessor<?> bean = context.getBean(processId,FieldProcessor.class);
+		FieldProcessor bean = context.getBean(processId,FieldProcessor.class);
 		if (type == ProcessorType.TABLE && bean instanceof TableDefinedProcessor) {
 			((TableDefinedProcessor) bean).setTableId(processor
 					.getTableDefinedId());
 		}
 		Object realValue = bean.get(id, value, tableColumn);
-		result.put(key, realValue);
+		Class<? extends BaseColumnData> clazz = columnData.getClass();
+		try {
+			Method method = clazz.getMethod("set" +StringUtil.upperFrist(key), Object.class);
+			method.invoke(columnData, realValue);
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+//		result.put(key, realValue);
 	}
 	
 	@Override

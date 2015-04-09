@@ -4,9 +4,13 @@ import com.calm.framework.common.entity.BaseEntity;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.List;
 
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "CMS_TABLE_DEFINED")
 public class TableDefined implements BaseEntity<Integer> {
 	/**
