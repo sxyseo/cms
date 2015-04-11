@@ -3,6 +3,7 @@ package com.calm.cms.impl.service;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -16,6 +17,7 @@ import com.calm.cms.api.compile.Compiler;
 import com.calm.cms.api.entity.BaseColumnData;
 import com.calm.cms.api.entity.FieldType;
 import com.calm.cms.api.entity.ProcessorType;
+import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableColumnKey;
 import com.calm.cms.api.entity.TableDefined;
@@ -71,7 +73,7 @@ public class EntityMapResultTransformer extends
 			TableDefined table = tdService.loadById(tableId);
 			BaseColumnData columnData = null;
 			try {
-				Class<? extends BaseColumnData> clazz = Compiler.getClass(table,EntityMapResultTransformer.class.getClassLoader());
+				Class<? extends BaseColumnData> clazz = Compiler.getClass(table,EntityMapResultTransformer.class.getClassLoader(),context);
 				columnData = clazz.newInstance();
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e1) {
 				throw new FrameworkExceptioin(e1.getMessage());
@@ -104,8 +106,15 @@ public class EntityMapResultTransformer extends
 		}
 		Object realValue = bean.get(id, value, tableColumn);
 		Class<? extends BaseColumnData> clazz = columnData.getClass();
+		Relation relation = tableColumn.getRelation();
+		Class<?> name;
+		if(Relation.ONE2MANY==relation){
+			name = List.class;
+		}else{
+			name = bean.getType();
+		}
 		try {
-			Method method = clazz.getMethod("set" +StringUtil.upperFrist(key), Object.class);
+			Method method = clazz.getMethod("set" +StringUtil.upperFrist(key), name);
 			method.invoke(columnData, realValue);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();

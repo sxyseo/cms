@@ -15,4 +15,14 @@ public class BooleanProcessor implements FieldProcessor {
 		}
 		return Boolean.valueOf(value.toString());
 	}
+
+	@Override
+	public Object getDisplayValue(Object value) {
+		return null;
+	}
+
+	@Override
+	public Class<?> getType() {
+		return Boolean.class;
+	}
 }

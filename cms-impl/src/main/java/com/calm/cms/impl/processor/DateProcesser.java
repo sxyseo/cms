@@ -52,4 +52,14 @@ public class DateProcesser implements FieldProcessor{
 		this.pattern = pattern;
 	}
 
+	@Override
+	public Object getDisplayValue(Object value) {
+		return null;
+	}
+
+	@Override
+	public Class<?> getType() {
+		return Date.class;
+	}
+
 }

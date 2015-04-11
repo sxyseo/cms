@@ -15,4 +15,14 @@ public class DoubleProcessor implements FieldProcessor{
 		}
 		return Double.valueOf(value.toString());
 	}
+
+	@Override
+	public Object getDisplayValue(Object value) {
+		return null;
+	}
+
+	@Override
+	public Class<?> getType() {
+		return Double.class;
+	}
 }

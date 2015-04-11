@@ -15,4 +15,14 @@ public class StringProcessor implements FieldProcessor{
 		}
 		return value.toString();
 	}
+
+	@Override
+	public Object getDisplayValue(Object value) {
+		return null;
+	}
+
+	@Override
+	public Class<?> getType() {
+		return String.class;
+	}
 }

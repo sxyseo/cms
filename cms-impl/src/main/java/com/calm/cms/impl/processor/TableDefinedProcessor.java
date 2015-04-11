@@ -319,4 +319,14 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 		}
 		return list;
 	}
+
+	@Override
+	public Object getDisplayValue(Object value) {
+		return null;
+	}
+
+	@Override
+	public Class<?> getType() {
+		return BaseColumnData.class;
+	}
 }

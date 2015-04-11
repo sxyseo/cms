@@ -15,4 +15,15 @@ public class IntegerProcessor implements FieldProcessor{
 		}
 		return Integer.valueOf(value.toString());
 	}
+
+	@Override
+	public Object getDisplayValue(Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Class<?> getType() {
+		return Integer.class;
+	}
 }

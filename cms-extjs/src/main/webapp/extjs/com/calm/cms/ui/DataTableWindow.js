@@ -37,10 +37,15 @@ Ext.define('com.calm.cms.ui.DataTableWindow', {
     		var columns=entity.columns;
     		var items=[],fields=[];
     		for(var i=0;i<columns.length;i++){
-    			var item=me.column2Items(columns[i]);
+    			var col=columns[i];
+    			var item=me.column2Items(col);
     			if(item){
     				items.push(item);
-    				fields.push(columns[i].id.id);
+    				if(col.relation=='MANY2ONE'){
+    					fields.push(columns[i].id.id+'_ID');
+        			}else{
+        				fields.push(columns[i].id.id);
+        			}
     			}
     		}
     		me.setWidth(fields.length*200+11);
@@ -65,6 +70,13 @@ Ext.define('com.calm.cms.ui.DataTableWindow', {
     column2Items:function(c){
     	if(c.relation=='ONE2MANY'){
     		return null;
+    	}
+    	if(c.relation=='MANY2ONE'){
+    		return {
+                text: c.name,
+                dataIndex: c.id.id+"_ID",
+                width:200
+           }
     	}
     	if(c.processor.type='table'){
     		return {
