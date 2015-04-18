@@ -3,4 +3,20 @@
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
+	<filter>
+		<description>LoginFilter</description>
+		<display-name>LoginFilter</display-name>
+		<filter-name>LoginFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<description>动态js生成</description>
+			<param-name>targetBeanName</param-name>
+			<param-value>dynamicJavascriptCreater</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>/dynamic/*</url-pattern>
+	</filter-mapping>
 </web-app>

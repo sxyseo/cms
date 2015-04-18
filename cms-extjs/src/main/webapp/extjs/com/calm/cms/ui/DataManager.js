@@ -106,8 +106,60 @@ Ext.define('com.calm.cms.ui.DataManager', {
         return win;
     },
     onTableItemClick: function (dataView, record) {
-    	var me = this, module = Ext.create('com.calm.cms.ui.DataTableWindow');
-    	module.tableId=record.data.id;
+    	var me=this;
+    	var module = Ext.create('dynamic.com.calm.cms.ui.DataTableWindow-'+record.data.id);
     	module.show();
+//    	com.calm.platform.Utils.requestAjax("cms/tableDefined/load",{id:record.data.id},function(data){
+//    		var entity=data.entity;
+//    		
+//    		var columns=entity.columns;
+//    		var items=[],fields=[];
+//    		for(var i=0;i<columns.length;i++){
+//    			var col=columns[i];
+//    			var item=me.column2Items(col);
+//    			if(item){
+//    				items.push(item);
+//    				if(col.relation=='MANY2ONE'){
+//    					fields.push(columns[i].id.id+'_ID');
+//        			}else{
+//        				fields.push(columns[i].id.id);
+//        			}
+//    			}
+//    		}
+//    		
+//    		var module = Ext.create('com.calm.cms.ui.DataTableWindow',{
+//    			tableId:record.data.id,
+//    			columns:columns,
+//    			fields:fields
+//    		});
+//    		module.setTitle(entity.name);
+//    		module.setWidth(fields.length*200+11);
+//        	module.show();
+//    	});
     },
+    column2Items:function(c){
+    	if(c.relation=='ONE2MANY'){
+    		return null;
+    	}
+    	if(c.relation=='MANY2ONE'){
+    		return {
+                text: c.name,
+                dataIndex: c.id.id+"_ID",
+                width:200
+           }
+    	}
+    	if(c.processor.type='table'){
+    		return {
+                text: c.name,
+                dataIndex: c.id.id,
+                width:200
+           }
+    	}else{
+    		return {
+                text: c.name,
+                dataIndex: c.id.id,
+                width:200
+           }
+    	}
+    }
 });
