@@ -1,18 +1,20 @@
 package com.calm.cms.api.entity;
 
 import com.calm.framework.common.entity.BaseEntity;
+import com.calm.framework.common.entity.TimeUpdate;
 
 import javax.persistence.*;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "CMS_TABLE_DEFINED")
-public class TableDefined implements BaseEntity<Integer> {
+public class TableDefined implements BaseEntity<Integer>,TimeUpdate {
 	/**
 	 * 
 	 */
@@ -40,7 +42,8 @@ public class TableDefined implements BaseEntity<Integer> {
 	@Column(name = "TABLE_TYPE")
 	@Enumerated(EnumType.STRING)
 	private TableType tableType;
-
+	private Timestamp createTime;
+	private Timestamp lastUpdateTime;
 	public TableDefined() {
 	}
 
@@ -130,6 +133,22 @@ public class TableDefined implements BaseEntity<Integer> {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Timestamp getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
+	}
+
+	public Timestamp getLastUpdateTime() {
+		return lastUpdateTime;
+	}
+
+	public void setLastUpdateTime(Timestamp lastUpdateTime) {
+		this.lastUpdateTime = lastUpdateTime;
 	}
 
 }

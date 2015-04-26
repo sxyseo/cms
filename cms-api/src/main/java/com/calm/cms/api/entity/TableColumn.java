@@ -60,8 +60,8 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	@Column(name = "RELATION_COLUMN")
 	private String relationColumn;
 	
-	@Column(name = "PRIMARY_KEY")
-	private Boolean primaryKey;
+	@Column(name = "SHOW_NAME")
+	private Boolean showName;
 	public TableColumn() {
 	}
 
@@ -187,11 +187,11 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 		this.relationTableDefined = relationTableDefined;
 	}
 
-	public Boolean getPrimaryKey() {
-		return primaryKey;
+	public Boolean getShowName() {
+		return showName;
 	}
 
-	public void setPrimaryKey(Boolean primaryKey) {
-		this.primaryKey = primaryKey;
+	public void setShowName(Boolean showName) {
+		this.showName = showName;
 	}
 }

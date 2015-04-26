@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.calm.cms.Constant;
 import com.calm.cms.api.compile.Compiler;
 import com.calm.cms.api.entity.BaseColumnData;
+import com.calm.cms.api.entity.BaseColumnDataKey;
 import com.calm.cms.api.entity.FieldType;
 import com.calm.cms.api.entity.ProcessorType;
 import com.calm.cms.api.entity.Relation;
@@ -78,8 +79,8 @@ public class EntityMapResultTransformer extends
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e1) {
 				throw new FrameworkExceptioin(e1.getMessage());
 			}
-			columnData.setId_(id);
-			columnData.setTableId_(tableId);
+			BaseColumnDataKey columnDataKey=new BaseColumnDataKey(id,tableId);
+			columnData.setId(columnDataKey);
 			map.put(cacheKey, columnData);
 			for (Map.Entry<String, Object> e : result.entrySet()) {
 				String key = e.getKey();

@@ -2,11 +2,7 @@ package com.calm.cms.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
@@ -17,16 +13,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-
-import com.alibaba.fastjson.JSON;
-import com.calm.cms.api.entity.Relation;
-import com.calm.cms.api.entity.TableColumn;
-import com.calm.cms.api.entity.TableDefined;
-import com.calm.cms.api.service.ITableDefinedService;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -40,7 +30,7 @@ public class DynamicJavascriptCreater implements Filter {
 	@Resource
 	private FreeMarkerConfigurer markerConfig;
 	@Resource
-	private ITableDefinedService tableDefinedService;
+	private ApplicationContext applicationContext;
     /**
      * Default constructor. 
      */
@@ -71,17 +61,18 @@ public class DynamicJavascriptCreater implements Filter {
 			requestURI = requestURI.substring(contextPath.length());
 		}
 		String substring = requestURI.substring(0,requestURI.lastIndexOf("."));
-		String[] split = substring.split("-");
-		String[] split2 = split[0].split("/");
-		String join = StringUtils.join(split2, "/");
+		int lastIndexOf = substring.lastIndexOf("/");
+		String templatePath = substring.substring(0, lastIndexOf);
+		String id = substring.substring(lastIndexOf+1);
 		Configuration configuration = markerConfig.getConfiguration();
 		markerConfig.setDefaultEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
 		try {
 			configuration.setEncoding(Locale.CHINA, "UTF-8");
-			Template template = configuration.getTemplate(join+".ftl");
-			TableDefined loadById = tableDefinedService.loadById(Integer.parseInt(split[1]));
-			template.process(buildData(loadById), writer);
+			Template template = configuration.getTemplate(templatePath+".ftl");
+			StaticDataBuilder bean = applicationContext.getBean(templatePath, StaticDataBuilder.class);
+			Object builder = bean.builder(id);
+			template.process(builder, writer);
 		} catch (Exception e) {
 			e.printStackTrace(writer);
 		}
@@ -95,66 +86,5 @@ public class DynamicJavascriptCreater implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		
 	}
-	public Map<String,Object> buildData(TableDefined loadById){
-		Map<String,Object> result=new HashMap<String, Object>();
-		result.put("id", loadById.getId());
-		result.put("title", loadById.getName());
-		getColumnFields(loadById,result);
-		return result;
-	}
-	private void getColumnFields(TableDefined loadById,Map<String,Object> map){
-		List<TableColumn> columns = loadById.getColumns();
-		
-		List<Map<String,Object>> items = new ArrayList<Map<String,Object>>();
-		List<String> fields =new ArrayList<String>();
-		for(TableColumn tc:columns){
-			Map<String,Object> item=column2Items(tc);
-			if(item!=null){
-				items.add(item);
-				if(tc.getRelation()==Relation.MANY2ONE){
-					fields.add(tc.getId().getId()+"_ID");
-    			}else{
-    				fields.add(tc.getId().getId());
-    			}
-			}
-		}
-		map.put("fields", JSON.toJSONString(fields));
-		map.put("columns", JSON.toJSONString(items));
-		map.put("width",""+( fields.size()*200+11));
-	}
-
-	private Map<String, Object> column2Items(TableColumn tc) {
-		Map<String,Object> result=new HashMap<String, Object>();
-		result.put("text", tc.getName());
-		result.put("width", 200);
-		switch (tc.getRelation()) {
-		case ONE2MANY:
-			return null;
-		case MANY2ONE:
-			result.put("dataIndex", tc.getId().getId()+"_ID");
-			return result;
-		default:
-			break;
-		}
-//		if(tc.getProcessor().getType()==ProcessorType.TABLE){
-			result.put("dataIndex", tc.getId().getId());
-			return result;
-//		}else{
-//			
-//		}
-//    	if(c.processor.type='table'){
-//    		return {
-//                text: c.name,
-//                dataIndex: c.id.id,
-//                width:200
-//           }
-//    	}else{
-//    		return {
-//                text: c.name,
-//                dataIndex: c.id.id,
-//                width:200
-//           }
-//    	}
-//		return null;
-	}
+	
 } 

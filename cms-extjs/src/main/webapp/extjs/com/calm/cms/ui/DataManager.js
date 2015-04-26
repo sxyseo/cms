@@ -107,7 +107,7 @@ Ext.define('com.calm.cms.ui.DataManager', {
     },
     onTableItemClick: function (dataView, record) {
     	var me=this;
-    	var module = Ext.create('dynamic.com.calm.cms.ui.DataTableWindow-'+record.data.id);
+    	var module = Ext.create('dynamic.com.calm.cms.ui.DataTableWindow.'+record.data.id);
     	module.show();
 //    	com.calm.platform.Utils.requestAjax("cms/tableDefined/load",{id:record.data.id},function(data){
 //    		var entity=data.entity;

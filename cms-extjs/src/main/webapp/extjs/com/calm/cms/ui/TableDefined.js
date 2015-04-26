@@ -338,8 +338,8 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 					dataIndex: 'required',
 					width:50
 				},{
-					text: '主键',
-					dataIndex: 'primaryKey',
+					text: '展示名',
+					dataIndex: 'showName',
 					width:50
 				},{
 					xtype:'actioncolumn',
@@ -454,6 +454,7 @@ Ext.define('com.calm.cms.ui.TableDefined', {
                 defaults: {
                     anchor: '100%'
                 },
+                constrainHeader: true,
                 bodyPadding: 15,
                 // The fields
                 defaultType: 'textfield',
@@ -609,8 +610,8 @@ Ext.define('com.calm.cms.ui.TableDefined', {
 				    fieldLabel:'必须填写',
 				    xtype:'checkbox'
 				},{
-					name: 'primaryKey',
-				    fieldLabel:'主键',
+					name: 'showName',
+				    fieldLabel:'展示名',
 				    xtype:'checkbox'
 				}],
 				buttons: [{

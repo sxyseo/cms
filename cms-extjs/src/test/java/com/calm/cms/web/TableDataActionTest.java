@@ -2,14 +2,11 @@ package com.calm.cms.web;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.calm.cms.api.entity.BaseColumnData;
 import com.calm.cms.api.service.IColumnDataService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.framework.test.FrameworkTest;
@@ -32,8 +29,8 @@ public class TableDataActionTest extends FrameworkTest{
 //		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 //			e.printStackTrace();
 //		}
-		List<BaseColumnData> listAll = columnDataService.listAll(2);
-		assertNotNull(listAll);
+//		List<BaseColumnData> listAll = columnDataService.listAll(2);
+//		assertNotNull(listAll);
 	}
 
 }

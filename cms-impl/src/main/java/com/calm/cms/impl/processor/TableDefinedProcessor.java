@@ -17,14 +17,14 @@ import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.processor.ListableFieldProcessor;
-import com.calm.cms.api.service.IColumnDataService;
+import com.calm.cms.api.service.ITableDataService;
 import com.calm.cms.api.service.ITableDefinedService;
 
 @Service
 public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnData> {
 	private Integer tableId;
 	@Resource
-	private IColumnDataService columnDataService;
+	private ITableDataService tableDataService;
 	@Resource
 	private ITableDefinedService tdService;
 
@@ -63,7 +63,7 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 		}
 		final TableDefined relTable = tdService
 				.loadByProperty("name", name);
-		list = columnDataService.list(relTable.getId(), new QueryMapper() {
+		list = tableDataService.list(relTable.getId(), new QueryMapper() {
 
 			@Override
 			public String getSql() {
@@ -119,7 +119,7 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 
 	private List<BaseColumnData> getListOne2Many(final Integer id,
 			final TableDefined loadById) {
-		return columnDataService.list(tableId, new QueryMapper() {
+		return tableDataService.list(tableId, new QueryMapper() {
 
 			@Override
 			public String getSql() {
@@ -143,7 +143,7 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 	
 	public BaseColumnData getById(final Map<String, Object> parameter,
 			final TableDefined loadById) {
-		List<BaseColumnData> list = columnDataService.list(tableId,
+		List<BaseColumnData> list = tableDataService.list(tableId,
 				new QueryMapper() {
 
 					@Override
@@ -202,7 +202,7 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 			return null;
 		}
 		final TableDefined loadById = tdService.loadById(tableId);
-		List<BaseColumnData> list = columnDataService.list(tableId, new QueryMapper() {
+		List<BaseColumnData> list = tableDataService.list(tableId, new QueryMapper() {
 
 			@Override
 			public String getSql() {
@@ -230,7 +230,7 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 
 	private List<BaseColumnData> loadOne2many(final Integer id,final TableColumn tableColumn){
 		final TableDefined loadById = tdService.loadById(tableId);
-		List<BaseColumnData> list = columnDataService.list(tableId, new QueryMapper() {
+		List<BaseColumnData> list = tableDataService.list(tableId, new QueryMapper() {
 
 			@Override
 			public String getSql() {
@@ -266,7 +266,7 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 		final TableDefined relTable = tdService
 				.loadByProperty("name", name);
 		List<BaseColumnData> 
-		list = columnDataService.list(relTable.getId(), new QueryMapper() {
+		list = tableDataService.list(relTable.getId(), new QueryMapper() {
 
 			@Override
 			public String getSql() {

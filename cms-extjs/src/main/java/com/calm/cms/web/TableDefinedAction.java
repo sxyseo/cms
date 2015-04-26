@@ -94,7 +94,7 @@ public class TableDefinedAction extends
 			}
 			
 			tco.setRequired(tc.getRequired());
-			tco.setPrimaryKey(tc.getPrimaryKey());
+			tco.setShowName(tc.getShowName());
 			list.add(tco);
 		}
 		result.put(LIST, list);

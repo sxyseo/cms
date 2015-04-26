@@ -2,8 +2,6 @@ package com.calm.cms.impl.service;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 
 import org.junit.Test;
@@ -41,7 +39,7 @@ public class ColumnDataServiceTest extends FrameworkTest {
 		cd.setValueText("1");
 		columnDataService.add(cd);
 		
-		List<?> listAll = columnDataService.listAll(1);
-		System.out.println(listAll);
+//		List<?> listAll = columnDataService.listAll(1);
+//		System.out.println(listAll);
 	}
 }

@@ -11,7 +11,7 @@ public class TableColumnVo {
 	private String relation;
 	private String relationName;
 	private Boolean required;
-	private Boolean primaryKey;
+	private Boolean showName;
 	private Integer processorId;
 	private String processorName;
 	private ProcessorType processorType;
@@ -96,11 +96,10 @@ public class TableColumnVo {
 	public void setProcessorType(ProcessorType processorType) {
 		this.processorType = processorType;
 	}
-	public Boolean getPrimaryKey() {
-		return primaryKey;
+	public Boolean getShowName() {
+		return showName;
 	}
-	public void setPrimaryKey(Boolean primaryKey) {
-		this.primaryKey = primaryKey;
+	public void setShowName(Boolean showName) {
+		this.showName = showName;
 	}
-	
 }

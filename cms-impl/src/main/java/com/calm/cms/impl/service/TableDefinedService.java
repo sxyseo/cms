@@ -28,6 +28,7 @@ import com.calm.framework.common.service.impl.BaseService;
 @Service
 public class TableDefinedService extends BaseService<Integer,TableDefined> implements
 		ITableDefinedService {
+	
 	/**
 	 * 类型服务
 	 */
@@ -192,5 +193,4 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 			TableColumn... temp) {
 		updateSqlText(table, true, temp);
 	}
-
 }

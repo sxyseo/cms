@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.calm</groupId>
     <artifactId>platform</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
   </parent>
   <artifactId>cms</artifactId>
   <packaging>pom</packaging>
@@ -13,4 +13,5 @@
   	<module>cms-admin</module>
   	<module>cms-extjs</module>
   </modules>
+  <version>0.0.1-SNAPSHOT</version>
 </project>
