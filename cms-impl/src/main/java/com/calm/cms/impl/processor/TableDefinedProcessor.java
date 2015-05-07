@@ -36,17 +36,16 @@ public class TableDefinedProcessor implements ListableFieldProcessor<BaseColumnD
 		this.tableId = tableId;
 	}
 
-	@Override
 	public List<BaseColumnData> getList(final Integer id, final TableColumn tableColumn) {
-		Relation relation = tableColumn.getRelation();
-		final TableDefined loadById = tdService.loadById(tableId);
-		List<BaseColumnData> list = null;
-		if (relation == Relation.ONE2MANY) {
-			list = getListOne2Many(id, loadById);
-		} else if (relation == Relation.MANY2MANY) {
-			list = getListMany2Many(id, tableColumn, loadById);
-		}
-		return list;
+		return tableDataService.listAll(tableId);
+//		final TableDefined tableDefined = tdService.loadById(tableId);
+//		List<BaseColumnData> list = null;
+//		if (relation == Relation.ONE2MANY) {
+//			list = getListOne2Many(tableId, tableDefined);
+//		} else if (relation == Relation.MANY2MANY) {
+//			list = getListMany2Many(tableId, tableColumn, tableDefined);
+//		}
+//		return list;
 	}
 
 	private List<BaseColumnData> getListMany2Many(final Integer id,

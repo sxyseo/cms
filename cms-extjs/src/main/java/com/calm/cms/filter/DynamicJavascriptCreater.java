@@ -73,6 +73,7 @@ public class DynamicJavascriptCreater implements Filter {
 			StaticDataBuilder bean = applicationContext.getBean(templatePath, StaticDataBuilder.class);
 			Object builder = bean.builder(id);
 			template.process(builder, writer);
+			return ;
 		} catch (Exception e) {
 			e.printStackTrace(writer);
 		}

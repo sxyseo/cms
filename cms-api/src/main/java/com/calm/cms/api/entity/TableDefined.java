@@ -38,11 +38,14 @@ public class TableDefined implements BaseEntity<Integer>,TimeUpdate {
 	@JoinColumn(name = "TABLE_ID")
 	@OrderBy("orderIndex")
 	private List<TableColumn> columns;
-
 	@Column(name = "TABLE_TYPE")
 	@Enumerated(EnumType.STRING)
 	private TableType tableType;
+	@Column(name = "ROW_ID")
+	private Integer rowId;
+	@Column(name = "CREATE_TIME")
 	private Timestamp createTime;
+	@Column(name = "LAST_UPDATE_TIME")
 	private Timestamp lastUpdateTime;
 	public TableDefined() {
 	}
@@ -149,6 +152,20 @@ public class TableDefined implements BaseEntity<Integer>,TimeUpdate {
 
 	public void setLastUpdateTime(Timestamp lastUpdateTime) {
 		this.lastUpdateTime = lastUpdateTime;
+	}
+
+	public Integer getRowId() {
+		return rowId;
+	}
+
+	public void setRowId(Integer rowId) {
+		this.rowId = rowId;
+	}
+
+	@Override
+	public String getObjectName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

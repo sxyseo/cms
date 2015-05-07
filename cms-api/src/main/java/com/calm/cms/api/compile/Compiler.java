@@ -110,5 +110,7 @@ public class Compiler {
 		}else{
 			helper.addMethod("public String getDisplayName(){ return String.valueOf(this.get"+displayColumn.getId().getId()+"());}");
 		}
+		helper.addMethod("public Object getDisplayValue(){ if(this.getId()==null){return null;}else{return this.getId().getId();}}");
+		helper.addMethod("public String getObjectName(){ return \""+tableDef.getName()+"\";}");
 	}
 }

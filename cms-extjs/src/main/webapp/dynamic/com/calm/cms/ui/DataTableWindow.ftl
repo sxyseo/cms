@@ -19,6 +19,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
     title: '${title}',
     width:${width},
     height:480,
+	
     animCollapse:false,
     constrainHeader:true,
     layout: {
@@ -28,7 +29,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
     initComponent:function(){
     	var me=this;
     	var store=Ext.create('Ext.data.Store', {
-    		id:'data-table-grid-store',
+    		id:'data-table-${id}-grid-store',
             pageSize: 15,
             autoLoad:true,
             fields:${fields},
@@ -44,7 +45,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
             }
         });
     	var grid=Ext.create('Ext.grid.Panel', {
-    		id:'data-table-grid',
+    		id:'data-table-${id}-grid',
 			columns:[<#list columns as c>{"text":"${c.text}","width":${c.width},"dataIndex":"${c.dataIndex}"},
 				</#list>{
     				 xtype:'actioncolumn',
@@ -92,9 +93,9 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
     	                	Ext.Msg.confirm("系统信息","你确定要删除?",function(buttonId,text,opt){
     	                		if(buttonId=='yes'){
     	                			var rec = grid.getStore().getAt(rowIndex);
-    	                			com.calm.platform.Utils.requestAjax('cms/table/data/delete/${id}/'+rec.get('proxyId'),function(){
+    	                			com.calm.platform.Utils.requestAjax('cms/table/data/delete/${id}/'+rec.get('proxyId'),{},function(){
     	                				store.reload();
-										grid.getView().refresh();
+										//grid.getView().refresh();
     	                			});
     	                		}
     	                	});
@@ -117,37 +118,53 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 				win.show();
 			}
         }];
+		me.fieldStores={
+			<#list stores as c><#if c_index gt 0>,</#if>
+			store_${c}:Ext.create('Ext.data.Store', {
+				fields : ['displayValue', 'displayName'],
+				proxy: {
+					type: 'ajax',
+					url : 'cms/table/data/many2one/${id}/${c}',
+					reader: {
+						type: 'json',
+						idProperty:'displayValue',
+					}
+				}	
+			})
+			</#list>
+		};
     	me.callParent();
     },
 	createEditorWindow:function(){
     	var me=this;
 		var form =Ext.create('Ext.form.Panel', {
-			url: 'cms/table/data/add',
+			url: 'cms/table/data/add/${id}/',
 			id:'cms-table-${id}-data-add-panel',
-			layout: {
-				type: 'vbox',
-				align : 'stretch',
-				pack  : 'start',
+			layout:{
+				type:'form',
+				padding: 5
 			},
 			// The fields
-			defaultType: 'panel',
-			items:[{
-					layout: 'vbox',
-					height:150,
-					defaultType: 'textfield',
-					items:[{
-						name: 'id',
-						xtype:'hiddenfield',
-						fieldLabel:'编号',
-						anchor:'100%' ,
-					},{
-						name: 'name',
-						fieldLabel:'模型名称',
-						allowBlank:false,
-						width:60,
-						anchor:'100%'
-					}]
-			}],
+			items:[<#list editorColumns as c><#if c_index gt 0>,</#if>
+				{
+					'layout':'${c.layout}',
+					'items':[<#list c.items as s1c><#if s1c_index gt 0>,</#if>{
+						"layout": "form",
+						"columnWidth": 0.5,
+						"items": [<#list s1c.items as s2c><#if s2c_index gt 0>,</#if>{
+							"name": "${s2c.name}",
+							"xtype": "${s2c.xtype}",
+							"fieldLabel": "${s2c.fieldLabel}",
+							<#if s2c.store??>store:${s2c.store},</#if>
+							<#if s2c.displayField??>displayField:"${s2c.displayField}",</#if>
+							<#if s2c.valueField??>valueField:"${s2c.valueField}",</#if>
+							<#if s2c.editable??>editable:${s2c.editable},</#if>
+							<#if s2c.inputValue??>inputValue:"${s2c.inputValue}",</#if>
+							<#if s2c.vtype??>vtype:"${s2c.vtype}",</#if>
+						}</#list>]
+					}</#list>]
+				}
+			</#list>],
 			buttons: [{
 				text: '取消',
 				handler: function() {
@@ -163,8 +180,9 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 							waitMsg: '正在保存...',
 							success: function(form, action) {
 								Ext.Msg.alert('系统信息', action.result.message);
-								me.grid.getStore().load();
-								me.grid.getView().refresh();
+								var grid=Ext.getCmp('data-table-${id}-grid');
+								grid.getStore().load();
+								//me.grid.getView().refresh();
 								win.close();
 							},
 							failure: function(form, action) {

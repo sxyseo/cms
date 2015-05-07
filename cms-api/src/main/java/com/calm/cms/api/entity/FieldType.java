@@ -136,4 +136,9 @@ public class FieldType implements BaseEntity<Integer>, LogisticDeletable {
 		this.processId = processId;
 	}
 
+	@Override
+	public String getObjectName() {
+		return null;
+	}
+
 }

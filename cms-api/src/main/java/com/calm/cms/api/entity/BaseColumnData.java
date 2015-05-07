@@ -31,15 +31,6 @@ public abstract class BaseColumnData implements BaseEntity<BaseColumnDataKey>{
 		this.id = id;
 	}
 
-	@Override
-	public String getDisplayName() {
-		return null;
-	}
-
-	@Override
-	public Object getDisplayValue() {
-		return null;
-	}
 	public Object getProxyId(){
 		if(id==null){
 			return null;

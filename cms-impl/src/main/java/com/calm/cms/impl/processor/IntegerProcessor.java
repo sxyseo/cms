@@ -13,12 +13,14 @@ public class IntegerProcessor implements FieldProcessor{
 		if (value == null) {
 			return null;
 		}
+		if(value.toString().trim().length()==0){
+			return null;
+		}
 		return Integer.valueOf(value.toString());
 	}
 
 	@Override
 	public Object getDisplayValue(Object value) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

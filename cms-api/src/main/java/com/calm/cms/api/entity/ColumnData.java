@@ -46,4 +46,9 @@ public class ColumnData implements BaseEntity<ColumnDataKey> {
 		this.valueText = valueText;
 	}
 
+	@Override
+	public String getObjectName() {
+		return null;
+	}
+
 }

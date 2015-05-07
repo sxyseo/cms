@@ -74,4 +74,9 @@ public class ColumnDefined implements BaseEntity<Integer> {
 		this.processor = processor;
 	}
 
+	@Override
+	public String getObjectName() {
+		return null;
+	}
+
 }

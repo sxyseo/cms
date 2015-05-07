@@ -194,4 +194,10 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 	public void setShowName(Boolean showName) {
 		this.showName = showName;
 	}
+
+	@Override
+	public String getObjectName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

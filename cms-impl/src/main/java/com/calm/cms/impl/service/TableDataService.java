@@ -3,11 +3,13 @@ package com.calm.cms.impl.service;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.calm.cms.api.dao.IColumnDataDao;
 import com.calm.cms.api.dao.QueryMapper;
@@ -15,6 +17,7 @@ import com.calm.cms.api.entity.BaseColumnData;
 import com.calm.cms.api.entity.BaseColumnDataKey;
 import com.calm.cms.api.entity.ColumnData;
 import com.calm.cms.api.entity.ColumnDataKey;
+import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.service.IColumnDataService;
 import com.calm.cms.api.service.ITableDataService;
@@ -94,6 +97,33 @@ public class TableDataService extends BaseService<BaseColumnDataKey,BaseColumnDa
 		List<ColumnData> list = query.list();
 		for(ColumnData cd:list){
 			columnDataService.delete(cd);
+		}
+	}
+	@Override
+	@Transactional
+	public void save(TableDefined tableDefined, Map<String, String> data) {
+		Query<ColumnDataKey, ColumnData> query = columnDataService.createQuery();
+		query.eq("id.tableColumn.id.tableDefined.id", tableDefined.getId());
+		query.max("id.id");
+		Integer rowId = query.load(Integer.class);
+		Integer rowId2 = tableDefined.getRowId();
+		int id=0;
+		if(rowId!=null){
+			id = rowId;
+		}
+		if(rowId2!=null && id<rowId2){
+			id = rowId2;
+		}
+		id++;
+		tableDefined.setRowId(id);
+		for(Map.Entry<String, String >e :data.entrySet()){
+			ColumnData ui = new ColumnData();
+			ui.setValueText(e.getValue());
+			ColumnDataKey key=new ColumnDataKey();
+			key.setId(id);
+			key.setTableColumn(new TableColumn(tableDefined, e.getKey()));
+			ui.setId(key);
+			columnDataService.add(ui);
 		}
 	}
 }
