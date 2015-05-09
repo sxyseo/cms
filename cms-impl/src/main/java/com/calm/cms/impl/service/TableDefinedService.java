@@ -63,6 +63,11 @@ public class TableDefinedService extends BaseService<Integer,TableDefined> imple
 	@Override
 	public void add(TableDefined newEntity) {
 		super.add(newEntity);
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT CD.ID AS "+Constant.ID+",CD.TABLE_ID AS "+Constant.TABLE_ID);
+		sql.append(" FROM "+Constant.DATA_TABLE_NAME+" CD WHERE CD.TABLE_ID=" + newEntity.getId()
+				+ " GROUP BY CD.ID,CD.TABLE_ID");
+		newEntity.setSqlText(sql.toString());
 		//数据表需要添加为处理类型
 		if(newEntity.getTableType()==TableType.DATA){
 			FieldType ft=new FieldType();

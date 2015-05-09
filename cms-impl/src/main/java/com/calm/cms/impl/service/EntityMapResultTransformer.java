@@ -23,6 +23,7 @@ import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableColumnKey;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.processor.FieldProcessor;
+import com.calm.cms.api.processor.ListableFieldProcessor;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.cms.impl.processor.TableDefinedProcessor;
@@ -55,6 +56,7 @@ public class EntityMapResultTransformer extends
 	 * {@inheritDoc}
 	 */
 	public Object transformTuple(Object[] tuple, String[] aliases) {
+		//数组转化为名值对
 		Map<String, Object> result = new HashMap<>(tuple.length);
 		for (int i = 0; i < tuple.length; i++) {
 			String alias = aliases[i];
@@ -64,14 +66,17 @@ public class EntityMapResultTransformer extends
 			result.put(alias, tuple[i]);
 		}
 
-		Integer id = (Integer) result.get(Constant.ID);
+		Integer rowId = (Integer) result.get(Constant.ID);
 		Integer tableId = (Integer) result.get(Constant.TABLE_ID);
 		
 		Map<String, BaseColumnData> map = cache.get();
-		String cacheKey = tableId + ":" + id;
+		String cacheKey = tableId + ":" + rowId;
+		//获得缓存对象
 		BaseColumnData map2 = map.get(cacheKey);
 		if (map2 == null) {
+			//如果缓存不存在,去数据库查询
 			TableDefined table = tdService.loadById(tableId);
+			//初始化数据对象
 			BaseColumnData columnData = null;
 			try {
 				Class<? extends BaseColumnData> clazz = Compiler.getClass(table,EntityMapResultTransformer.class.getClassLoader(),context);
@@ -79,15 +84,17 @@ public class EntityMapResultTransformer extends
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e1) {
 				throw new FrameworkExceptioin(e1.getMessage());
 			}
-			BaseColumnDataKey columnDataKey=new BaseColumnDataKey(id,tableId);
+			//构建KEY
+			BaseColumnDataKey columnDataKey=new BaseColumnDataKey(rowId,tableId);
 			columnData.setId(columnDataKey);
 			map.put(cacheKey, columnData);
+			//处理各个属性
 			for (Map.Entry<String, Object> e : result.entrySet()) {
 				String key = e.getKey();
 				if (key.equals(Constant.ID)||key.equals(Constant.TABLE_ID)) {
 					continue;
 				}
-				processField(table,key,id,e.getValue(),columnData);
+				processField(table,key,rowId,e.getValue(),columnData);
 			}
 			return columnData;
 		} else {
@@ -95,27 +102,49 @@ public class EntityMapResultTransformer extends
 		}
 	}
 	
-	private void processField(TableDefined table,String key,Integer id,Object value , BaseColumnData columnData){
+	/**
+	 * 处理属性
+	 * @param table
+	 * @param key
+	 * @param rowId
+	 * @param value
+	 * @param columnData
+	 */
+	private void processField(TableDefined table,String key,Integer rowId,Object value , BaseColumnData columnData){
 		TableColumn tableColumn = tcService.loadById(new TableColumnKey(table, key));
 		FieldType processor = tableColumn.getProcessor();
 		ProcessorType type = processor.getType();
 		String processId = processor.getProcessId();
 		FieldProcessor bean = context.getBean(processId,FieldProcessor.class);
-		if (type == ProcessorType.TABLE && bean instanceof TableDefinedProcessor) {
-			((TableDefinedProcessor) bean).setTableId(processor
-					.getTableDefinedId());
-		}
-		Object realValue = bean.get(id, value, tableColumn);
-		Class<? extends BaseColumnData> clazz = columnData.getClass();
-		Relation relation = tableColumn.getRelation();
-		Class<?> name;
-		if(Relation.ONE2MANY==relation){
-			name = List.class;
+		Class<?> fieldType = null;
+		Object realValue = null;
+		if(type==ProcessorType.SIMPLE){
+			realValue = bean.get(rowId, value, tableColumn);
+			fieldType = bean.getType();
 		}else{
-			name = bean.getType();
+			if(bean instanceof TableDefinedProcessor){
+				((TableDefinedProcessor) bean).setTableId(processor.getTableDefinedId());
+			}
+			Relation relation = tableColumn.getRelation();
+			ListableFieldProcessor<?> listable=(ListableFieldProcessor<?>) bean;
+			String string = value.toString();
+			if(Relation.ONE2MANY==relation){
+				fieldType = List.class;
+				realValue = listable.getOne2Many(string, tableColumn);
+			}else if(Relation.MANY2MANY==relation){
+				fieldType = List.class;
+				realValue = listable.getOne2Many(string, tableColumn);
+			}else if(Relation.MANY2ONE==relation){
+				fieldType = bean.getType();
+				realValue = bean.get(rowId, value, tableColumn);
+			}
+		
 		}
+
+		Class<? extends BaseColumnData> clazz = columnData.getClass();
+		
 		try {
-			Method method = clazz.getMethod("set" +StringUtil.upperFrist(key), name);
+			Method method = clazz.getMethod("set" +StringUtil.upperFrist(key), fieldType);
 			method.invoke(columnData, realValue);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();

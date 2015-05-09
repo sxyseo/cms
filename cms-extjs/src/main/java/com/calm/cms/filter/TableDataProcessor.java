@@ -107,9 +107,11 @@ public class TableDataProcessor implements StaticDataBuilder {
 		result.put("layout", "form");
 
 		Map<String,String> field=new HashMap<String, String>();
+		field.put("name", tc.getId().getId());
 		field.put("fieldLabel", tc.getName());
 		if(tc.getRelation()==Relation.MANY2ONE){
 			field.put("xtype", "combobox");
+			field.put("name", tc.getId().getId()+"_ID");
 			field.put("store", "me.fieldStores.store_"+tc.getId().getId());
 			field.put("displayField", "displayName");
 			field.put("valueField", "displayValue");
@@ -126,7 +128,7 @@ public class TableDataProcessor implements StaticDataBuilder {
 				field.put("xtype", "textfield");
 			}
 		}
-		field.put("name", tc.getId().getId());
+		
 		List<Map<String,String>> items=new ArrayList<Map<String,String>>();
 		items.add(field);
 		result.put("items", items);

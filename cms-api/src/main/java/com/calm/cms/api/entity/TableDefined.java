@@ -164,8 +164,7 @@ public class TableDefined implements BaseEntity<Integer>,TimeUpdate {
 
 	@Override
 	public String getObjectName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "数据模型";
 	}
 
 }

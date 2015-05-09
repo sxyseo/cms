@@ -16,5 +16,8 @@ public interface ITableDataService extends IBaseService<BaseColumnDataKey,BaseCo
 	public List<BaseColumnData> list(Integer tableId, QueryMapper queryMapper);
 	public Paging<BaseColumnData> paging(Integer currentPage, Integer pageSize, Integer tableId);
 
-	public void save(TableDefined loadById, Map<String, String> data);
+	public void add(TableDefined loadById, Map<String, String> data);
+
+	public void update(TableDefined loadById, Integer rowId,
+			Map<String, String> data);
 }

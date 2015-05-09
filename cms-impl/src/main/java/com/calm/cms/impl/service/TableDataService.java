@@ -43,6 +43,7 @@ public class TableDataService extends BaseService<BaseColumnDataKey,BaseColumnDa
 	public Paging<BaseColumnData> paging(Integer currentPage, Integer pageSize,
 			Integer tableId) {
 		TableDefined loadById = tableDefinedService.loadById(tableId);
+		
 		DefaultPaging<BaseColumnData> defaultPaging = new DefaultPaging<BaseColumnData>();
 		if (loadById == null) {
 			defaultPaging.setTotalCount(0);
@@ -101,7 +102,7 @@ public class TableDataService extends BaseService<BaseColumnDataKey,BaseColumnDa
 	}
 	@Override
 	@Transactional
-	public void save(TableDefined tableDefined, Map<String, String> data) {
+	public void add(TableDefined tableDefined, Map<String, String> data) {
 		Query<ColumnDataKey, ColumnData> query = columnDataService.createQuery();
 		query.eq("id.tableColumn.id.tableDefined.id", tableDefined.getId());
 		query.max("id.id");
@@ -117,13 +118,42 @@ public class TableDataService extends BaseService<BaseColumnDataKey,BaseColumnDa
 		id++;
 		tableDefined.setRowId(id);
 		for(Map.Entry<String, String >e :data.entrySet()){
-			ColumnData ui = new ColumnData();
-			ui.setValueText(e.getValue());
+			
 			ColumnDataKey key=new ColumnDataKey();
 			key.setId(id);
 			key.setTableColumn(new TableColumn(tableDefined, e.getKey()));
-			ui.setId(key);
-			columnDataService.add(ui);
+			
+			ColumnData loadById = columnDataService.loadById(key);
+			if(loadById==null){
+				ColumnData ui = new ColumnData();
+				ui.setId(key);
+				ui.setValueText(e.getValue());
+				columnDataService.add(ui);
+			}else{
+				loadById.setValueText(e.getValue());
+				columnDataService.update(loadById);				
+			}
+		}
+	}
+	@Override
+	public void update(TableDefined tableDefined, Integer rowId,
+			Map<String, String> data) {
+		for(Map.Entry<String, String >e :data.entrySet()){
+			
+			ColumnDataKey key=new ColumnDataKey();
+			key.setId(rowId);
+			key.setTableColumn(new TableColumn(tableDefined, e.getKey()));
+			
+			ColumnData loadById = columnDataService.loadById(key);
+			if(loadById==null){
+				ColumnData ui = new ColumnData();
+				ui.setId(key);
+				ui.setValueText(e.getValue());
+				columnDataService.add(ui);
+			}else{
+				loadById.setValueText(e.getValue());
+				columnDataService.update(loadById);				
+			}
 		}
 	}
 }

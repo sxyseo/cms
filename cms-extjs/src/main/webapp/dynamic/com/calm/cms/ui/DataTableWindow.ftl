@@ -49,41 +49,25 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 			columns:[<#list columns as c>{"text":"${c.text}","width":${c.width},"dataIndex":"${c.dataIndex}"},
 				</#list>{
     				 xtype:'actioncolumn',
-    				 width:60,
+    				 width:50,
     				 items: [{
-    					iconCls: 'cms-table-defined-action-table-column',
-     	                tooltip: '编辑列',
-     	                handler: function(grid, rowIndex, colIndex) {
-     	                	//获得对话框
-     	                	var editorWindow=me.createTableColumnWindow();
-     	                	//获得选中的数据
-     	                    var rec = grid.getStore().getAt(rowIndex);
-     	                    editorWindow.title='['+rec.get('name')+']模型项目';
-     	                    editorWindow.tableId=rec.get('id');
-     	                    store.load({params:{tableId:rec.get('id')}});
+						iconCls: 'edit',
+						tooltip: '修改',
+						handler: function(grid, rowIndex, colIndex) {
+							//获得对话框
+							var editorWindow=me.createEditorWindow();
+							//获得表单在的panel
+							var detailPanel = editorWindow.getComponent('cms-table-${id}-data-form-panel');
+							//获得选中的数据
+							var rec = grid.getStore().getAt(rowIndex);
+							//获得表单，并把数据加载到表单内
+							var form=detailPanel.getForm();
+							form.url='cms/table/data/update/${id}/'+rec.get('proxyId')+"/";
+							form.loadRecord(rec);
 
-     	                    editorWindow.show();
-     	                }
-     	            },{
-   					iconCls: 'edit',
- 	                tooltip: '修改',
- 	                handler: function(grid, rowIndex, colIndex) {
- 	                	//获得对话框
- 	                	var editorWindow=me.createEditorWindow();
-                     	//获得表单在的panel
- 	                	var detailPanel = editorWindow.getComponent('cms-table-defined-add-panel');
- 	                	//获得选中的数据
- 	                    var rec = grid.getStore().getAt(rowIndex);
- 	                    //获得表单，并把数据加载到表单内
- 	                    var form=detailPanel.getForm();
- 	                    form.url='cms/tableDefined/update';
- 	                    form.loadRecord(rec);
- 	                    var field=form.findField("id");
- 	                    field.readOnly = true;
-
- 	                    editorWindow.show();
- 	                	}
-     	            },{
+							editorWindow.show();
+						}
+					},{
     	            	iconCls: 'remove',
     	                tooltip: '删除',
     	                isDisabled :function(grid, rowIndex, colIndex,item ,record ){
@@ -100,7 +84,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
     	                		}
     	                	});
     	                }
-    	       }]
+					}]
 			   }],
 			store:store,
 			dockedItems: [{
@@ -122,6 +106,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 			<#list stores as c><#if c_index gt 0>,</#if>
 			store_${c}:Ext.create('Ext.data.Store', {
 				fields : ['displayValue', 'displayName'],
+				autoLoad:true,
 				proxy: {
 					type: 'ajax',
 					url : 'cms/table/data/many2one/${id}/${c}',
@@ -139,7 +124,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
     	var me=this;
 		var form =Ext.create('Ext.form.Panel', {
 			url: 'cms/table/data/add/${id}/',
-			id:'cms-table-${id}-data-add-panel',
+			id:'cms-table-${id}-data-form-panel',
 			layout:{
 				type:'form',
 				padding: 5
