@@ -10,6 +10,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 	//引用需要的类
     requires: [
         'Ext.tree.Panel',
+		'Ext.ux.form.ItemSelector',
         'Ext.form.field.Text',
         'com.calm.cms.module.TableDefined',
         'com.calm.cms.module.TableColumn',
@@ -109,7 +110,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 				autoLoad:true,
 				proxy: {
 					type: 'ajax',
-					url : 'cms/table/data/many2one/${id}/${c}',
+					url : 'cms/table/data/store/${id}/${c}',
 					reader: {
 						type: 'json',
 						idProperty:'displayValue',
@@ -135,7 +136,7 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 					'layout':'${c.layout}',
 					'items':[<#list c.items as s1c><#if s1c_index gt 0>,</#if>{
 						"layout": "form",
-						"columnWidth": 0.5,
+						"columnWidth": ${s1c.columnWidth},
 						"items": [<#list s1c.items as s2c><#if s2c_index gt 0>,</#if>{
 							"name": "${s2c.name}",
 							"xtype": "${s2c.xtype}",
@@ -146,6 +147,9 @@ Ext.define('dynamic.com.calm.cms.ui.DataTableWindow.${id}', {
 							<#if s2c.editable??>editable:${s2c.editable},</#if>
 							<#if s2c.inputValue??>inputValue:"${s2c.inputValue}",</#if>
 							<#if s2c.vtype??>vtype:"${s2c.vtype}",</#if>
+							<#if s2c.toTitle??>toTitle:"${s2c.toTitle}",</#if>
+							<#if s2c.fromTitle??>fromTitle:"${s2c.fromTitle}",</#if>							
+							<#if s2c.height??>height:${s2c.height},</#if>
 						}</#list>]
 					}</#list>]
 				}

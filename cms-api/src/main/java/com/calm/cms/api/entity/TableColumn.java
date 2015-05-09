@@ -71,7 +71,7 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 
 	@Override
 	public String getDisplayName() {
-		return "模型属性";
+		return name;
 	}
 
 	@Override
@@ -197,7 +197,6 @@ public class TableColumn implements BaseEntity<TableColumnKey> {
 
 	@Override
 	public String getObjectName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "模型属性";
 	}
 }

@@ -121,9 +121,9 @@ public class TableDataAction extends BaseAction{
 	}
 	
 	@SuppressWarnings({"unchecked" })
-	@RequestMapping("/many2one/{tableId}/{field}")
+	@RequestMapping("/store/{tableId}/{field}")
 	@ResponseBody
-	public Object many2one(@PathVariable("tableId") Integer tableId,
+	public Object store(@PathVariable("tableId") Integer tableId,
 			@PathVariable("field") String field, Model model) {
 		TableColumn loadById = tableColumnService.loadById(new TableColumnKey(new TableDefined(tableId), field));
 		FieldType processor = loadById.getProcessor();

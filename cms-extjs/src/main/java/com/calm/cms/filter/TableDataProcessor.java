@@ -2,8 +2,10 @@ package com.calm.cms.filter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -53,17 +55,17 @@ public class TableDataProcessor implements StaticDataBuilder {
 		result.put("dataIndex", "proxyId");
 		items.add(result);
 		List<String> fields =new ArrayList<String>();
-		List<String> many2ones=new ArrayList<String>();
+		Set<String> many2ones=new HashSet<String>();
 		fields.add("proxyId");
 		for(TableColumn tc:columns){
 			Map<String,Object> item=column2Items(tc);
 			if(item!=null){
 				items.add(item);
 				//如果是多对一展示数据ID
-				if(tc.getRelation()==Relation.MANY2ONE){
+				Relation relation = tc.getRelation();
+				if(relation==Relation.MANY2ONE){
 					fields.add(tc.getId().getId()+"_ID");
-					many2ones.add(tc.getId().getId());
-    			}else{
+    			} else{
     				fields.add(tc.getId().getId());
     			}
 			}
@@ -85,6 +87,11 @@ public class TableDataProcessor implements StaticDataBuilder {
 			}
 			List<Map<String, Object>> r=(List<Map<String, Object>>) object;
 			r.add(column2EditorColumn);
+			
+			Relation relation = tc.getRelation();
+			if(relation==Relation.MANY2ONE || relation==Relation.ONE2MANY|| relation==Relation.MANY2MANY){
+				many2ones.add(tc.getId().getId());
+			}
 		}
 		
 		map.put("fields", JSON.toJSONString(fields));
@@ -101,22 +108,36 @@ public class TableDataProcessor implements StaticDataBuilder {
 	 */
 	private Map<String, Object> column2EditorColumn(TableColumn tc) {
 		Map<String,Object> result=new HashMap<String, Object>();
-		//列占比
-		result.put("columnWidth", 0.5);
+		Relation relation = tc.getRelation();
+		if(relation==Relation.MANY2MANY|| relation==Relation.ONE2MANY){
+			result.put("columnWidth", 0.98);
+		}else{
+			//列占比
+			result.put("columnWidth", 0.49);
+		}
+		
 		//布局
 		result.put("layout", "form");
 
 		Map<String,String> field=new HashMap<String, String>();
 		field.put("name", tc.getId().getId());
 		field.put("fieldLabel", tc.getName());
-		if(tc.getRelation()==Relation.MANY2ONE){
+		if(relation==Relation.MANY2ONE){
 			field.put("xtype", "combobox");
 			field.put("name", tc.getId().getId()+"_ID");
 			field.put("store", "me.fieldStores.store_"+tc.getId().getId());
 			field.put("displayField", "displayName");
 			field.put("valueField", "displayValue");
 			field.put("editable", "false");
-		}else{
+		} else if (relation == Relation.ONE2MANY || relation == Relation.MANY2MANY ) {
+			field.put("xtype", "itemselector");
+			field.put("store", "me.fieldStores.store_"+tc.getId().getId());
+			field.put("fromTitle", "Available");
+			field.put("toTitle", "Selected");
+			field.put("displayField", "displayName");
+			field.put("valueField", "displayValue");
+			field.put("height", "200");
+		} else {
 			switch (tc.getProcessor().getProcessId()) {
 			case "booleanProcessor":
 				field.put("xtype", "checkbox");

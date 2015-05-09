@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.CannotCompileException;
+import javassist.NotFoundException;
+
 import javax.annotation.Resource;
 
 import org.hibernate.transform.AliasedTupleSubsetResultTransformer;
@@ -83,6 +86,12 @@ public class EntityMapResultTransformer extends
 				columnData = clazz.newInstance();
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e1) {
 				throw new FrameworkExceptioin(e1.getMessage());
+			} catch (CannotCompileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			//构建KEY
 			BaseColumnDataKey columnDataKey=new BaseColumnDataKey(rowId,tableId);

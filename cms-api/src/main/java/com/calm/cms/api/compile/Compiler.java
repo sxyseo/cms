@@ -26,37 +26,48 @@ import com.calm.javassist.helper.MethodHelper;
 
 public class Compiler {
 	private static final String CLASS_NAME = BaseColumnData.class.getName();
-	private static final Map<Object,Class<? extends BaseColumnData>> classMap = new HashMap<Object, Class<? extends BaseColumnData>>();
-	public static Class<? extends BaseColumnData> getClass(TableDefined tableDef,ClassLoader classLoader,ApplicationContext context) throws ClassNotFoundException{
-		
+	private static final Map<TableDefined,Class<? extends BaseColumnData>> classMap = new HashMap<TableDefined, Class<? extends BaseColumnData>>();
+	public static Class<? extends BaseColumnData> getClass(TableDefined tableDef,ClassLoader classLoader,ApplicationContext context) throws ClassNotFoundException, CannotCompileException, NotFoundException{
+		ClassHelper helper = ClassHelper.getHelper(classLoader);
 		String className = CLASS_NAME+tableDef.getId();
 		Class<? extends BaseColumnData> clazz = classMap.get(tableDef);
-		if(clazz!=null){
-			Set<Object> keySet = classMap.keySet();
-			for(Object o:keySet){
-				if(o.equals(tableDef)){
+		if(clazz==null){
+			helper.makeClass(className).setSupperClass(CLASS_NAME);
+		}else{
+			Set<TableDefined> keySet = classMap.keySet();
+			for(TableDefined o:keySet){
+				if(o.getId().equals(o.getId())){
 					TableDefined td=(TableDefined) o;
 					if(td.getLastUpdateTime().equals(tableDef.getLastUpdateTime())){
 						return clazz;
+					}else{
+						helper.getClass(className);
+						removeExist(clazz,helper);
 					}
 				}
 			}
-//			rebuild;
-			return clazz;
 		}
 		
 		try {
-			ClassHelper helper = ClassHelper.getHelper(classLoader);
-			helper.makeClass(className).setSupperClass(CLASS_NAME);
 			processFieldAndMethod(helper,tableDef,context);
 			clazz = helper.toClass();
 			classMap.put(tableDef, clazz);
 			return clazz;
-		} catch (NotFoundException | CannotCompileException e) {
+		} catch (CannotCompileException e) {
 			throw new ClassNotFoundException(e.getMessage());
 		}
 	}
-
+	
+	private static void removeExist(Class<?> clazz,ClassHelper helper) throws NotFoundException{
+		MethodHelper[] methods = helper.getMethods();
+		for(MethodHelper mh:methods){
+			helper.removeMethod(mh);
+		}
+		FieldHelper[] fields = helper.getFields();
+		for(FieldHelper mh:fields){
+			helper.removeField(mh);
+		}
+	}
 	private static void processFieldAndMethod(ClassHelper helper,
 			TableDefined tableDef, ApplicationContext context) throws CannotCompileException {
 		List<TableColumn> columns = tableDef.getColumns();
@@ -106,7 +117,7 @@ public class Compiler {
 			helper.addSetMethod("set"+methodName, field);
 		}
 		if(displayColumn==null){
-			helper.addMethod("public String getDisplayName(){ return String.valueOf(this.getId_());}");
+			helper.addMethod("public String getDisplayName(){ return String.valueOf(this.getId());}");
 		}else{
 			helper.addMethod("public String getDisplayName(){ return String.valueOf(this.get"+displayColumn.getId().getId()+"());}");
 		}
