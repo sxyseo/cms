@@ -1,5 +1,6 @@
 package com.calm.cms.api.compile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,14 +10,13 @@ import javassist.CannotCompileException;
 import javassist.CtMember;
 import javassist.NotFoundException;
 
-import org.springframework.context.ApplicationContext;
-
 import com.alibaba.fastjson.annotation.JSONField;
 import com.calm.cms.api.entity.BaseColumnData;
 import com.calm.cms.api.entity.Relation;
 import com.calm.cms.api.entity.TableColumn;
 import com.calm.cms.api.entity.TableDefined;
 import com.calm.cms.api.processor.FieldProcessor;
+import com.calm.framework.ApplicationContext;
 import com.calm.framework.util.StringUtil;
 import com.calm.javassist.helper.AnnationHelper;
 import com.calm.javassist.helper.ClassHelper;
@@ -53,7 +53,7 @@ public class Compiler {
 			clazz = helper.toClass();
 			classMap.put(tableDef, clazz);
 			return clazz;
-		} catch (CannotCompileException e) {
+		} catch (CannotCompileException | IOException e) {
 			throw new ClassNotFoundException(e.getMessage());
 		}
 	}

@@ -12,7 +12,6 @@ import javassist.NotFoundException;
 import javax.annotation.Resource;
 
 import org.hibernate.transform.AliasedTupleSubsetResultTransformer;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.calm.cms.Constant;
@@ -30,6 +29,7 @@ import com.calm.cms.api.processor.ListableFieldProcessor;
 import com.calm.cms.api.service.ITableColumnService;
 import com.calm.cms.api.service.ITableDefinedService;
 import com.calm.cms.impl.processor.TableDefinedProcessor;
+import com.calm.framework.ApplicationContext;
 import com.calm.framework.common.exception.FrameworkExceptioin;
 import com.calm.framework.util.StringUtil;
 
