@@ -12,6 +12,7 @@
   	<module>cms-impl</module>
   	<module>cms-admin</module>
   	<module>cms-extjs</module>
+  	<module>cms-vaadin</module>
   </modules>
   <version>0.0.1-SNAPSHOT</version>
 </project>
